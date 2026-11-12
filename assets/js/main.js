@@ -170,6 +170,7 @@
   iframe.style.cssText="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;border:0;left:-9999px";
   document.body.appendChild(iframe);
   const forms=Array.from(document.querySelectorAll('form[action*="script.google.com/macros/s/"]'));
+  forms.forEach(form=>{const note=form.querySelector("#enquiry-status, .form-note");if(note)note.textContent="Your submission result will appear here. Please keep this page open.";});
   forms.filter(form=>form!==popupForm).forEach(form=>{
     if(form.parentElement.querySelector(".inline-enquiry-result"))return;
     const panel=document.createElement("section");panel.className="inline-enquiry-result";panel.hidden=true;panel.setAttribute("role","status");panel.setAttribute("aria-live","polite");
