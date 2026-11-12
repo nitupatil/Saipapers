@@ -26,8 +26,10 @@
     ["Custom Self Adhesive Labels","custom-self-adhesive-labels","Custom labels","adhesive labels customized sticker labels"]
   ];
   /* Shared search UI is mounted inside the existing header on every page. */
+  const isProductPage=/\/products\/[^/]+\.html$/i.test(location.pathname);
+  if(isProductPage)document.body.classList.add("product-detail-page");
   const header=document.querySelector(".header-inner");
-  if(header&&!document.getElementById("header-search-form")){
+  if(header&&!isProductPage&&!document.getElementById("header-search-form")){
     const brand=header.querySelector(".brand");
     const root=brand&&brand.getAttribute("href")?.startsWith("../")?"../":"";
     const search=document.createElement("form");
@@ -95,20 +97,16 @@
     searchList.addEventListener("click",()=>close());
   }
 
-  /* 16:9 slideshow. Only the current and adjacent images are loaded initially. */
+  /* Control-free product slideshow: pause on hover/focus and reduced motion. */
   const carousel=document.getElementById("banner-carousel");
   if(carousel){
     const slides=Array.from(carousel.querySelectorAll(".banner-slide"));
-    const dots=Array.from(carousel.querySelectorAll(".banner-dot"));
-    const counter=document.getElementById("banner-counter");
-    const pauseButton=document.getElementById("banner-pause");
-    const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let index=0,paused=false,timer=null,touchX=null;
+    const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let index=0,timer=null,hovered=false,touchX=null;
     function ensure(i){
-      const slide=slides[(i+slides.length)%slides.length];
-      if(!slide)return;
-      const image=slide.querySelector("img[data-src]");
-      if(image){image.src=image.dataset.src;image.removeAttribute("data-src");}
+      if(!slides.length)return;
+      const img=slides[(i+slides.length)%slides.length].querySelector("img[data-src]");
+      if(img){img.src=img.dataset.src;img.removeAttribute("data-src");}
     }
     function show(i){
       if(!slides.length)return;
@@ -118,38 +116,27 @@
         const active=j===index;
         slide.classList.toggle("is-active",active);
         slide.setAttribute("aria-hidden",String(!active));
-        const link=slide.querySelector("a");if(link)link.tabIndex=active?0:-1;
+        const a=slide.querySelector("a");
+        if(a)a.tabIndex=active?0:-1;
       });
-      dots.forEach((dot,j)=>{dot.classList.toggle("is-active",j===index);dot.setAttribute("aria-current",String(j===index));});
-      if(counter)counter.textContent=String(index+1).padStart(2,"0")+" / "+String(slides.length).padStart(2,"0");
-      const activeLink=slides[index]?.querySelector("a");
-      const bannerLink=document.getElementById("banner-product-link");
-      const bannerTitle=document.getElementById("banner-active-title");
-      if(activeLink&&bannerLink&&bannerTitle){
-        bannerLink.href=activeLink.getAttribute("href");
-        bannerTitle.textContent=slides[index].getAttribute("aria-label").replace(/^[^:]*: /,"");
-      }
     }
-    function stop(){if(timer){clearInterval(timer);timer=null;}}
-    function start(){stop();if(!paused&&!reduced&&!document.hidden&&!carousel.contains(document.activeElement)){timer=setInterval(()=>show(index+1),2000);}}
-    carousel.querySelector("[data-slide-prev]")?.addEventListener("click",()=>{show(index-1);start();});
-    carousel.querySelector("[data-slide-next]")?.addEventListener("click",()=>{show(index+1);start();});
-    dots.forEach((dot,j)=>dot.addEventListener("click",()=>{show(j);start();}));
-    pauseButton?.addEventListener("click",()=>{
-      paused=!paused;pauseButton.textContent=paused?"▶":"Ⅱ";
-      pauseButton.setAttribute("aria-label",paused?"Play banner slideshow":"Pause banner slideshow");
-      pauseButton.setAttribute("aria-pressed",String(paused));
-      start();
-    });
+    function stop(){if(timer!==null){clearInterval(timer);timer=null;}}
+    function start(){
+      stop();
+      if(slides.length>1&&!reduced&&!document.hidden&&!hovered&&!carousel.contains(document.activeElement))
+        timer=window.setInterval(()=>show(index+1),4500);
+    }
+    carousel.addEventListener("mouseenter",()=>{hovered=true;stop();});
+    carousel.addEventListener("mouseleave",()=>{hovered=false;start();});
     carousel.addEventListener("focusin",stop);
     carousel.addEventListener("focusout",e=>{if(!carousel.contains(e.relatedTarget))start();});
-    carousel.addEventListener("keydown",e=>{
-      if(e.key==="ArrowRight"){e.preventDefault();show(index+1);start();}
-      if(e.key==="ArrowLeft"){e.preventDefault();show(index-1);start();}
-    });
     carousel.addEventListener("touchstart",e=>{touchX=e.changedTouches[0].screenX;},{passive:true});
-    carousel.addEventListener("touchend",e=>{if(touchX===null)return;const delta=e.changedTouches[0].screenX-touchX;touchX=null;if(Math.abs(delta)>45){show(index+(delta<0?1:-1));start();}},{passive:true});
-    document.addEventListener("visibilitychange",()=>{document.hidden?stop():start();});
+    carousel.addEventListener("touchend",e=>{
+      if(touchX===null)return;
+      const delta=e.changedTouches[0].screenX-touchX;touchX=null;
+      if(Math.abs(delta)>45){show(index+(delta<0?1:-1));start();}
+    },{passive:true});
+    document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();else start();});
     show(0);start();
   }
 
