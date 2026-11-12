@@ -319,3 +319,57 @@
     items.forEach(item=>observer.observe(item));
   }else items.forEach(item=>item.classList.add("is-visible"));
 })();
+
+/* Printer gallery: select scene, browse images, enlarge without loading a gallery library. */
+(function initBarcodePrinterGallery(){
+  const gallery=document.getElementById("printer-gallery");
+  if(!gallery)return;
+  const image=document.getElementById("printer-gallery-main");
+  const title=document.getElementById("printer-gallery-title");
+  const description=document.getElementById("printer-gallery-description");
+  const count=document.getElementById("printer-gallery-count");
+  const thumbs=Array.from(gallery.querySelectorAll("[data-printer-thumb]"));
+  const modal=document.getElementById("printer-gallery-lightbox");
+  const modalImage=document.getElementById("printer-lightbox-image");
+  const modalCaption=document.getElementById("printer-lightbox-caption");
+  if(!image||!thumbs.length)return;
+  let active=0;
+  function select(index){
+    active=(index+thumbs.length)%thumbs.length;
+    const thumb=thumbs[active];
+    image.src=thumb.dataset.image;
+    image.alt=thumb.dataset.alt||"Desktop barcode printer example";
+    if(title)title.textContent=thumb.dataset.title||"Product view";
+    if(description)description.textContent=thumb.dataset.description||"";
+    if(count)count.textContent=(active+1)+" / "+thumbs.length;
+    thumbs.forEach((b,i)=>{
+      const selected=i===active;
+      b.classList.toggle("is-selected",selected);
+      b.setAttribute("aria-pressed",String(selected));
+    });
+    thumb.scrollIntoView({block:"nearest",inline:"nearest",behavior:"auto"});
+    if(modal&&modal.open&&modalImage){
+      modalImage.src=image.src;
+      modalImage.alt=image.alt;
+      if(modalCaption)modalCaption.textContent=thumb.dataset.title||"Product view";
+    }
+  }
+  thumbs.forEach((thumb,i)=>thumb.addEventListener("click",()=>select(i)));
+  gallery.querySelector("#printer-gallery-prev")?.addEventListener("click",()=>select(active-1));
+  gallery.querySelector("#printer-gallery-next")?.addEventListener("click",()=>select(active+1));
+  gallery.querySelector("#printer-gallery-zoom")?.addEventListener("click",()=>{
+    if(!modal||!modalImage)return;
+    modalImage.src=image.src;
+    modalImage.alt=image.alt;
+    if(modalCaption)modalCaption.textContent=thumbs[active].dataset.title||"Product view";
+    if(typeof modal.showModal==="function")modal.showModal();
+  });
+  gallery.querySelector("[data-close-printer-lightbox]")?.addEventListener("click",()=>modal?.close());
+  modal?.addEventListener("click",event=>{if(event.target===modal)modal.close();});
+  gallery.addEventListener("keydown",event=>{
+    if(event.key==="ArrowLeft"||event.key==="ArrowRight"){
+      if(!gallery.contains(document.activeElement))return;
+      event.preventDefault();select(active+(event.key==="ArrowRight"?1:-1));
+    }
+  });
+})();

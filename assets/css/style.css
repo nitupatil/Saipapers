@@ -165,3 +165,35 @@
  .banner-slide{transition:none!important;transform:none!important}
  .banner-dot{transition:none!important}
 }
+
+/* Desktop barcode printer gallery: product-first, no labels over the images */
+.printer-gallery{min-width:0;width:100%;align-self:start}
+.printer-gallery-feature{margin:0;background:#fff;border:1px solid #e4e8ef;border-radius:16px;overflow:hidden;box-shadow:0 6px 25px #1b1d2d0b}
+.printer-gallery-zoom{border:0;padding:0;background:#f8f9fb;display:block;width:100%;cursor:zoom-in;position:relative}
+.printer-gallery-zoom img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;object-position:center}
+.printer-gallery-zoom .zoom-hint{position:absolute;right:14px;top:14px;background:#fffffff2;color:#364050;border:1px solid #e7ebef;padding:5px 9px;font-size:11px;font-weight:750;border-radius:8px;box-shadow:0 4px 9px #1418270b}
+.printer-gallery-caption{padding:13px 17px 16px;display:flex;flex-direction:column;gap:3px;min-height:94px}
+.printer-gallery-caption strong{font-size:14px;color:#1b1d2d}
+.printer-gallery-caption span{color:#667083;font-size:12px;line-height:1.6}
+.printer-gallery-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:17px 0 11px}
+.printer-gallery-toolbar h3{margin:0;font-size:15px;font-weight:800;color:#1b1d2d}
+.printer-gallery-pager{display:flex;align-items:center;gap:8px;flex:none}
+.printer-gallery-pager button{border:1px solid #d8dee8;background:#fff;color:#1b1d2d;display:grid;place-items:center;width:32px;height:32px;font-size:17px;border-radius:8px}
+.printer-gallery-pager button:hover{border-color:#ca080d;color:#ca080d}
+.printer-gallery-pager span{font-size:11px;color:#687388;font-weight:800;min-width:38px;text-align:center}
+.printer-gallery-thumbs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.printer-thumb{background:#fff;border:2px solid #e2e6ee;border-radius:11px;padding:5px 5px 7px;text-align:center;min-width:0;transition:box-shadow .2s,border-color .2s,transform .2s}
+.printer-thumb:hover{border-color:#c7ced9;box-shadow:0 4px 12px #1b1d2d10;transform:translateY(-2px)}
+.printer-thumb.is-selected{border-color:#ca080d;background:#fffafa;box-shadow:0 0 0 2px #ca080d0b}
+.printer-thumb img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;border-radius:6px;background:#f7f8fa}
+.printer-thumb span{display:block;font-size:9px;line-height:1.35;font-weight:700;color:#45506a;margin-top:6px;min-height:25px}
+.printer-gallery-notice{font-size:11px;color:#7a8391;line-height:1.55;margin:14px 2px 0}
+.printer-lightbox{border:0;border-radius:17px;padding:20px;width:min(800px,92vw);max-height:93dvh;box-shadow:0 25px 85px #13182772;position:fixed;overflow:auto;background:#fff;text-align:center}
+.printer-lightbox::backdrop{background:#0e1425ce;backdrop-filter:blur(3px)}
+.printer-lightbox img{width:100%;max-height:calc(93dvh - 115px);aspect-ratio:1/1;object-fit:contain;display:block}
+.printer-lightbox-close{position:absolute;z-index:2;top:10px;right:10px;border:1px solid #e4e8ef;border-radius:50%;background:#fff;color:#1b1d2d;width:40px;height:40px;font-size:26px;line-height:1;display:grid;place-items:center}
+.printer-lightbox p{color:#323b4f;font-size:13px;margin:9px 0 0;font-weight:700}
+.printer-context-section{padding-bottom:44px}
+@media(max-width:850px){.printer-gallery{max-width:630px;margin:0 auto}.printer-gallery-thumbs{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:590px){.printer-gallery-feature{border-radius:13px}.printer-gallery-caption{padding:13px;min-height:90px}.printer-gallery-toolbar{margin-top:16px}.printer-gallery-toolbar h3{font-size:13px}.printer-gallery-thumbs{display:grid;grid-auto-flow:column;grid-auto-columns:100px;grid-template-columns:none;grid-template-rows:none;overflow-x:auto;overscroll-behavior-x:contain;padding:2px 2px 11px;scroll-snap-type:x proximity;gap:9px;-webkit-overflow-scrolling:touch}.printer-thumb{scroll-snap-align:start}.printer-gallery-zoom .zoom-hint{font-size:9px;top:8px;right:8px}.printer-lightbox{padding:10px}}
+@media(prefers-reduced-motion:reduce){.printer-thumb{transition:none!important}}
