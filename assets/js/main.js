@@ -97,12 +97,12 @@
     searchList.addEventListener("click",()=>close());
   }
 
-  /* Control-free product slideshow: pause on hover/focus and reduced motion. */
+  /* Product-only slideshow: rotate every 2s; pause on keyboard focus or reduced motion. */
   const carousel=document.getElementById("banner-carousel");
   if(carousel){
     const slides=Array.from(carousel.querySelectorAll(".banner-slide"));
     const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let index=0,timer=null,hovered=false,touchX=null;
+    let index=0,timer=null,touchX=null;
     function ensure(i){
       if(!slides.length)return;
       const img=slides[(i+slides.length)%slides.length].querySelector("img[data-src]");
@@ -123,11 +123,9 @@
     function stop(){if(timer!==null){clearInterval(timer);timer=null;}}
     function start(){
       stop();
-      if(slides.length>1&&!reduced&&!document.hidden&&!hovered&&!carousel.contains(document.activeElement))
-        timer=window.setInterval(()=>show(index+1),4500);
+      if(slides.length>1&&!reduced&&!document.hidden&&!carousel.contains(document.activeElement))
+        timer=window.setInterval(()=>show(index+1),2000);
     }
-    carousel.addEventListener("mouseenter",()=>{hovered=true;stop();});
-    carousel.addEventListener("mouseleave",()=>{hovered=false;start();});
     carousel.addEventListener("focusin",stop);
     carousel.addEventListener("focusout",e=>{if(!carousel.contains(e.relatedTarget))start();});
     carousel.addEventListener("touchstart",e=>{touchX=e.changedTouches[0].screenX;},{passive:true});
