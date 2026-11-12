@@ -296,3 +296,54 @@
 @media(max-width:850px){.showcase-intro-top{display:block}.showcase-intro-top p{max-width:650px;margin-top:12px}.detail-wrap:has(.printer-gallery) .detail-main{grid-template-columns:1fr}.printer-gallery{max-width:620px}.printer-story{gap:0}.printer-story-content{padding:24px}.printer-application-grid{grid-template-columns:repeat(2,1fr)}.printer-material-grid{grid-template-columns:1fr}}
 @media(max-width:590px){.showcase-shell{padding:14px 0 23px}.showcase-intro-top{margin-bottom:14px}.showcase-intro-top h1{font-size:clamp(25px,6.5vw,35px)}.showcase-intro-top p{font-size:12px;margin-top:10px}.banner-carousel{border-radius:11px}.banner-underbar{display:block;padding-top:10px}.banner-underbar-label{justify-content:space-between}.banner-underbar-label a{font-size:12px}.banner-underbar-kicker{font-size:8px}.banner-underbar .banner-meta{justify-content:center;padding:7px 0}.product-body>.product-category{font-size:9px;padding:4px 7px}.detail-wrap:has(.printer-gallery){padding-top:20px}.printer-story{grid-template-columns:1fr;gap:0}.printer-story-reverse .printer-story-media{order:0}.printer-story-content{padding:22px}.printer-story-content h2{font-size:25px}.printer-application-grid,.printer-material-grid{grid-template-columns:1fr}.printer-material-card{grid-template-columns:42% 58%}.printer-quick-cta{display:block;padding:23px}.printer-quick-cta .btn{margin-top:15px;width:100%}.printer-gallery-thumbs{grid-auto-columns:96px}.printer-editorial-lead{margin:30px auto 23px}}
 @media(prefers-reduced-motion:reduce){.banner-slide{transition:none!important}}
+
+/* Sai Papers: split homepage hero and streamlined product-page header */
+.product-showcase{background:linear-gradient(145deg,#f4f6fa 0%,#fcfcfd 100%)}
+.product-showcase .showcase-shell{padding:35px 0 43px}
+.showcase-feature{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);align-items:center;gap:0;background:#fff;border:1px solid #e3e7ef;border-radius:23px;overflow:hidden;box-shadow:0 14px 40px #1b1d2d0d}
+.showcase-feature .banner-carousel{width:calc(100% - 48px);max-width:none;aspect-ratio:16/9;height:auto;margin:24px;border-radius:16px;border:1px solid #e5e9f0;background:#f8f9fb;box-shadow:none}
+.showcase-feature .banner-slide{transform:none;transition:opacity .55s ease,visibility .55s linear}
+.showcase-feature .banner-slide.is-active{transform:none}
+.showcase-feature .banner-slide img{object-fit:contain;object-position:center;background:#f8f9fb}
+.showcase-detail{min-width:0;padding:34px 38px 34px 16px}
+.showcase-detail .eyebrow{margin:0 0 10px;font-size:10px;line-height:1.5}
+.showcase-detail h1{font-size:clamp(30px,3.1vw,43px);line-height:1.11;letter-spacing:-.044em;margin:0 0 15px;font-weight:900}
+.showcase-lead{font-size:14px;line-height:1.76;color:#647084;margin:0 0 21px}
+.showcase-highlights{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:23px}
+.showcase-highlights span{font-size:11px;font-weight:760;color:#374456;background:#f5f7f9;border:1px solid #e8edf2;border-radius:100px;padding:5px 10px;white-space:nowrap}
+.showcase-highlights span::before{content:"✓";color:#149263;margin-right:6px;font-weight:900}
+.showcase-actions{display:flex;gap:10px;flex-wrap:wrap}
+.showcase-actions .btn{min-height:44px;padding:11px 17px}
+.showcase-footnote{font-size:11px;color:#8993a2;margin:13px 0 0}
+.product-detail-page .header-inner{justify-content:space-between}
+.product-detail-page .nav-links{margin-left:auto}
+@media(max-width:1050px){
+ .showcase-feature{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .showcase-feature .banner-carousel{width:calc(100% - 34px);margin:17px}
+ .showcase-detail{padding:26px 24px 26px 4px}
+ .showcase-detail h1{font-size:clamp(26px,3.15vw,34px)}
+ .showcase-lead{font-size:12.5px;margin-bottom:15px}
+ .showcase-highlights{gap:6px;margin-bottom:15px}
+}
+@media(max-width:850px){
+ .product-showcase .showcase-shell{padding:17px 0 30px}
+ .showcase-feature{grid-template-columns:1fr;border-radius:16px}
+ .showcase-feature .banner-carousel{width:calc(100% - 34px);margin:17px 17px 0;aspect-ratio:16/9}
+ .showcase-detail{padding:19px 24px 27px}
+ .showcase-detail h1{font-size:clamp(29px,5vw,39px);max-width:670px}
+ .showcase-lead{font-size:13px;max-width:680px}
+ .product-detail-page .header-inner{grid-template-rows:auto;gap:0}
+ .product-detail-page .nav-links{margin-left:0}
+}
+@media(max-width:590px){
+ .product-showcase .showcase-shell{padding:12px 0 23px}
+ .showcase-feature{border-radius:13px}
+ .showcase-feature .banner-carousel{width:calc(100% - 24px);margin:12px 12px 0;border-radius:9px}
+ .showcase-detail{padding:18px 17px 22px}
+ .showcase-detail h1{font-size:clamp(27px,7vw,35px);margin-bottom:12px}
+ .showcase-lead{font-size:12.5px;line-height:1.65}
+ .showcase-highlights span{font-size:10px}
+ .showcase-actions .btn{flex:1;padding:11px 10px;font-size:12px}
+ .showcase-footnote{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){.showcase-feature .banner-slide{transition:none}}
