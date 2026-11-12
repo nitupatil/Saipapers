@@ -122,9 +122,16 @@
       });
       dots.forEach((dot,j)=>{dot.classList.toggle("is-active",j===index);dot.setAttribute("aria-current",String(j===index));});
       if(counter)counter.textContent=String(index+1).padStart(2,"0")+" / "+String(slides.length).padStart(2,"0");
+      const activeLink=slides[index]?.querySelector("a");
+      const bannerLink=document.getElementById("banner-product-link");
+      const bannerTitle=document.getElementById("banner-active-title");
+      if(activeLink&&bannerLink&&bannerTitle){
+        bannerLink.href=activeLink.getAttribute("href");
+        bannerTitle.textContent=slides[index].getAttribute("aria-label").replace(/^[^:]*: /,"");
+      }
     }
     function stop(){if(timer){clearInterval(timer);timer=null;}}
-    function start(){stop();if(!paused&&!reduced&&!document.hidden&&!carousel.matches(":hover")&&!carousel.contains(document.activeElement)){timer=setInterval(()=>show(index+1),6200);}}
+    function start(){stop();if(!paused&&!reduced&&!document.hidden&&!carousel.contains(document.activeElement)){timer=setInterval(()=>show(index+1),2000);}}
     carousel.querySelector("[data-slide-prev]")?.addEventListener("click",()=>{show(index-1);start();});
     carousel.querySelector("[data-slide-next]")?.addEventListener("click",()=>{show(index+1);start();});
     dots.forEach((dot,j)=>dot.addEventListener("click",()=>{show(j);start();}));
@@ -134,8 +141,6 @@
       pauseButton.setAttribute("aria-pressed",String(paused));
       start();
     });
-    carousel.addEventListener("mouseenter",stop);
-    carousel.addEventListener("mouseleave",start);
     carousel.addEventListener("focusin",stop);
     carousel.addEventListener("focusout",e=>{if(!carousel.contains(e.relatedTarget))start();});
     carousel.addEventListener("keydown",e=>{

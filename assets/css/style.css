@@ -197,3 +197,102 @@
 @media(max-width:850px){.printer-gallery{max-width:630px;margin:0 auto}.printer-gallery-thumbs{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(max-width:590px){.printer-gallery-feature{border-radius:13px}.printer-gallery-caption{padding:13px;min-height:90px}.printer-gallery-toolbar{margin-top:16px}.printer-gallery-toolbar h3{font-size:13px}.printer-gallery-thumbs{display:grid;grid-auto-flow:column;grid-auto-columns:100px;grid-template-columns:none;grid-template-rows:none;overflow-x:auto;overscroll-behavior-x:contain;padding:2px 2px 11px;scroll-snap-type:x proximity;gap:9px;-webkit-overflow-scrolling:touch}.printer-thumb{scroll-snap-align:start}.printer-gallery-zoom .zoom-hint{font-size:9px;top:8px;right:8px}.printer-lightbox{padding:10px}}
 @media(prefers-reduced-motion:reduce){.printer-thumb{transition:none!important}}
+
+
+/* Product-first refinement: unobstructed photos, tighter desktop spacing */
+.product-img-link>.product-category{display:none}
+.product-body>.product-category{position:static;display:inline-flex;align-self:flex-start;width:auto;max-width:100%;background:#fff1f2;color:#ad0c19;border:1px solid #f1d9db;border-radius:7px;padding:5px 9px;font-size:10px;font-weight:800;line-height:1.2;margin:0 0 10px}
+.product-img-link img{object-fit:contain;background:#f8f9fb}
+.product-card{min-width:0}
+.product-body{min-width:0}
+.card-grid{gap:17px}
+.product-card .product-body{padding:16px}
+.product-card .product-body p{margin-bottom:13px}
+.product-card .product-body h3{margin-bottom:7px}
+
+/* Compact image-only banner: all captions and controls below the product */
+.product-showcase{background:linear-gradient(180deg,#f6f7fa,#fff)}
+.showcase-shell{padding:22px 0 26px}
+.showcase-intro-top{display:flex;align-items:end;gap:35px;justify-content:space-between;max-width:1040px;margin:0 auto 22px;padding:0}
+.showcase-intro-top h1{font-size:clamp(27px,3.15vw,41px);line-height:1.18;max-width:660px}
+.showcase-intro-top p{font-size:13px;line-height:1.65;max-width:350px}
+.banner-carousel{width:100%;max-width:1040px;margin:0 auto;aspect-ratio:16/9;border-radius:16px;background:#fafbfc;border:1px solid #e4e7ee;box-shadow:0 10px 28px #19223814}
+.banner-slide{transition:opacity .35s ease,visibility .35s linear,transform 2s ease}
+.banner-slide.is-active{transform:none}
+.banner-slide img{object-fit:contain;background:#fafbfc}
+.banner-arrow{width:40px;height:40px;opacity:.78;box-shadow:0 4px 11px #1b1d2d13}
+.banner-arrow:hover{opacity:1}
+.banner-underbar{max-width:1040px;margin:auto;padding:13px 4px 0;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.banner-underbar-label{display:flex;align-items:center;gap:13px;min-width:0}
+.banner-underbar-kicker{font-size:9px;font-weight:850;letter-spacing:.12em;color:#949bac;white-space:nowrap}
+.banner-underbar-label a{color:#1b1d2d;font-size:14px;display:inline-flex;align-items:center;gap:8px;font-weight:850}
+.banner-underbar-label a:hover{color:#ca080d}
+.banner-underbar-label a span{color:#ca080d;font-size:17px}
+.banner-underbar .banner-meta{position:static;left:auto;bottom:auto;transform:none;display:flex;gap:9px;background:transparent;backdrop-filter:none;border:none;box-shadow:none;padding:0;min-height:30px;max-width:none}
+.banner-underbar .banner-dots{max-width:none}
+.banner-underbar .banner-dot{background:#afb6c4;width:7px;height:7px}
+.banner-underbar .banner-dot.is-active{background:#ca080d;width:22px}
+.banner-underbar .banner-counter{font-size:10px}
+.feature-benefits{padding-top:23px}
+
+/* Barcode printer detail: narrative alternates with images and fills desktop */
+.detail-wrap:has(.printer-gallery){padding:35px 0 62px}
+.detail-wrap:has(.printer-gallery) .detail-main{grid-template-columns:minmax(0,.96fr) minmax(0,1.04fr);gap:30px}
+.detail-wrap:has(.printer-gallery) .detail-copy h2.product-title{margin-bottom:14px!important}
+.detail-wrap:has(.printer-gallery) .detail-copy p{margin-bottom:13px}
+.detail-wrap:has(.printer-gallery) .detail-points{margin:18px 0}
+.detail-wrap:has(.printer-gallery) .detail-pricing{margin:17px 0}
+.printer-gallery-thumbs{display:grid;grid-auto-flow:column;grid-auto-columns:95px;grid-template-columns:none;grid-template-rows:none;gap:8px;overflow-x:auto;padding:3px 2px 10px;scroll-snap-type:x proximity;overscroll-behavior-x:contain;scrollbar-width:thin}
+.printer-thumb{scroll-snap-align:start}
+.printer-gallery-feature{box-shadow:0 4px 14px #1b1d2d0b}
+.printer-gallery-zoom img{max-height:440px;object-fit:contain}
+.printer-gallery-caption{min-height:77px;padding:10px 14px}
+.printer-gallery-toolbar{margin:12px 0 9px}
+.printer-gallery-notice{margin:8px 0 0}
+.detail-wrap:has(.printer-gallery) .specs-section{margin-top:40px;gap:28px;padding-top:25px;border-top:1px solid #e8ebf0}
+.detail-wrap:has(.printer-gallery)>.section{padding-block:38px!important}
+.printer-editorial{padding-top:5px;margin-top:37px;border-top:1px solid #e6eaf1}
+.printer-editorial-lead{text-align:center;max-width:720px;margin:35px auto 26px}
+.printer-editorial-lead .eyebrow{margin-bottom:7px}
+.printer-editorial-lead h2{font-size:clamp(27px,3vw,38px);margin:0 0 11px}
+.printer-editorial-lead p{font-size:14px;line-height:1.7;margin:0}
+.printer-story{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:22px;min-height:315px;border:1px solid #e2e7ee;background:#f6f7fa;border-radius:17px;overflow:hidden;margin:16px 0}
+.printer-story:nth-child(odd){background:#fff}
+.printer-story-content{padding:28px 32px}
+.printer-story-content .eyebrow{margin-bottom:10px}
+.printer-story-content h2{font-size:clamp(24px,2.6vw,34px);margin:0 0 12px}
+.printer-story-content p{font-size:13.5px;line-height:1.72;margin:0 0 12px}
+.printer-story-list{list-style:none;padding:0;margin:0}
+.printer-story-list li{position:relative;padding-left:21px;font-size:12.5px;line-height:1.65;color:#657083;margin:7px 0}
+.printer-story-list li:before{content:"✓";position:absolute;left:0;color:#c20812;font-weight:900}
+.printer-story-media{margin:0;align-self:stretch;background:#f7f8fa;display:flex;flex-direction:column;justify-content:center}
+.printer-story-media img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain}
+.printer-story-media figcaption{font-size:10px;color:#828b9a;background:#fff;padding:8px 13px}
+.printer-story-reverse .printer-story-media{order:-1}
+.printer-applications,.printer-materials{padding:27px 0 40px}
+.printer-application-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.printer-application-card{background:white;border:1px solid #e0e5ee;border-radius:15px;overflow:hidden;min-width:0;box-shadow:0 5px 15px #1b1d2d08}
+.printer-application-card figure,.printer-material-card figure{margin:0;background:#f7f8fa}
+.printer-application-card figure img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.printer-application-card figure figcaption{font-size:10px;letter-spacing:.07em;font-weight:800;text-transform:uppercase;color:#9d1522;background:#fff1f2;padding:8px 14px}
+.printer-application-card>div{padding:17px 19px 21px}
+.printer-application-card h3{font-size:17px;margin:0 0 9px}
+.printer-application-card p{font-size:12.5px;margin:0 0 12px}
+.printer-application-card .text-link{font-size:12px}
+.printer-materials{border-top:1px solid #e6e9f0}
+.printer-material-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.printer-material-card{display:grid;grid-template-columns:minmax(0,42%) minmax(0,1fr);align-items:center;border:1px solid #e1e5ec;border-radius:14px;overflow:hidden;background:#fff}
+.printer-material-card figure img{width:100%;height:auto;display:block;aspect-ratio:1;object-fit:contain}
+.printer-material-card figcaption{font-size:10px;padding:6px;text-align:center;color:#738093}
+.printer-material-card>div{padding:14px}
+.printer-material-card h3{font-size:17px;margin:0 0 7px}
+.printer-material-card p{font-size:12px;line-height:1.7;margin:0}
+.printer-quick-cta{margin-top:22px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:#1b1d2d;border-radius:14px;padding:23px 27px}
+.printer-quick-cta h3{color:#fff;margin:0 0 4px;font-size:21px}
+.printer-quick-cta p{color:#d7d9e2;font-size:13px;margin:0}
+.printer-quick-cta .btn{flex:none}
+@media(min-width:1181px){.card-grid{gap:18px}.product-body{min-height:170px}}
+@media(max-width:1050px){.showcase-intro-top{max-width:100%}.banner-underbar{max-width:100%}.detail-wrap:has(.printer-gallery) .detail-main{gap:25px}.printer-story-content{padding:24px}}
+@media(max-width:850px){.showcase-intro-top{display:block}.showcase-intro-top p{max-width:650px;margin-top:12px}.detail-wrap:has(.printer-gallery) .detail-main{grid-template-columns:1fr}.printer-gallery{max-width:620px}.printer-story{gap:0}.printer-story-content{padding:24px}.printer-application-grid{grid-template-columns:repeat(2,1fr)}.printer-material-grid{grid-template-columns:1fr}}
+@media(max-width:590px){.showcase-shell{padding:14px 0 23px}.showcase-intro-top{margin-bottom:14px}.showcase-intro-top h1{font-size:clamp(25px,6.5vw,35px)}.showcase-intro-top p{font-size:12px;margin-top:10px}.banner-carousel{border-radius:11px}.banner-underbar{display:block;padding-top:10px}.banner-underbar-label{justify-content:space-between}.banner-underbar-label a{font-size:12px}.banner-underbar-kicker{font-size:8px}.banner-underbar .banner-meta{justify-content:center;padding:7px 0}.product-body>.product-category{font-size:9px;padding:4px 7px}.detail-wrap:has(.printer-gallery){padding-top:20px}.printer-story{grid-template-columns:1fr;gap:0}.printer-story-reverse .printer-story-media{order:0}.printer-story-content{padding:22px}.printer-story-content h2{font-size:25px}.printer-application-grid,.printer-material-grid{grid-template-columns:1fr}.printer-material-card{grid-template-columns:42% 58%}.printer-quick-cta{display:block;padding:23px}.printer-quick-cta .btn{margin-top:15px;width:100%}.printer-gallery-thumbs{grid-auto-columns:96px}.printer-editorial-lead{margin:30px auto 23px}}
+@media(prefers-reduced-motion:reduce){.banner-slide{transition:none!important}}
