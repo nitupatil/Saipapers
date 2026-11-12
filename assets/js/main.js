@@ -101,6 +101,7 @@
   const carousel=document.getElementById("banner-carousel");
   if(carousel){
     const slides=Array.from(carousel.querySelectorAll(".banner-slide"));
+    const categoryTiles=Array.from(document.querySelectorAll("[data-gallery-product]"));
     const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let index=0,timer=null,touchX=null;
     function ensure(i){
@@ -119,6 +120,7 @@
         const a=slide.querySelector("a");
         if(a)a.tabIndex=active?0:-1;
       });
+      categoryTiles.forEach((tile,j)=>tile.classList.toggle("is-current",j===index));
     }
     function stop(){if(timer!==null){clearInterval(timer);timer=null;}}
     function start(){
