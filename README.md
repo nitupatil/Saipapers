@@ -45,3 +45,12 @@ Sai Paper Product — Baliram Gadekar
 
 ## Content review
 Product descriptions and typical specifications are adapted from the business-supplied document. Confirm all model-specific values, compatibility claims, operating capabilities and regulatory requirements before commercial publication. Prices and reviews have deliberately not been invented.
+
+## November 12 design update
+
+- Header product search with immediate local suggestions, mobile-friendly layout and keyboard navigation.
+- Eleven responsive 16:9 SVG promotional banners in `assets/banners/`; the carousel includes autoplay, swipe, arrows, dots and pause.
+- Colored feature blocks with restrained animations and clearer bordered product cards.
+- HTML product listings remain fully crawlable with unique pages; Shop page also exposes an `ItemList` schema.
+- The forms now submit inside a hidden iframe and show **Submitting…** on the page. For true **Enquiry submitted** confirmation, upgrade the separately hosted Google Apps Script to `integrations/SaiPapers_WebApp_v2.gs` via **Manage deployments → Edit → New version**.
+- See `integrations/README.md` for the exact script update and testing steps. An unchanged Google Apps Script deployment cannot send a trustworthy in-page acknowledgement.
