@@ -455,3 +455,81 @@
   .collection-visual{background:#ffffff}
   .collection-visual .banner-carousel{border:0}
 }
+
+
+/* November 2026: full-bleed red-and-white product banner directly below navigation. */
+.product-showcase{
+  width:100%;
+  margin:0;
+  padding:0;
+  border:0;
+  background:linear-gradient(116deg,#b70e1d 0%,#e23d45 14%,#fff5f4 34%,#fff 60%,#db192b 100%);
+}
+.banner-bleed{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  background:linear-gradient(112deg,#c41224 0%,#fce6e6 30%,#fff 60%,#d01024 100%);
+}
+.banner-bleed::before,
+.banner-bleed::after{
+  content:"";
+  pointer-events:none;
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:6%;
+  opacity:.27;
+  background:linear-gradient(160deg,transparent 20%,#9c0713 100%);
+}
+.banner-bleed::before{left:0;transform:skewX(-12deg) translateX(-55%)}
+.banner-bleed::after{right:0;transform:skewX(-12deg) translateX(55%)}
+.banner-bleed .banner-carousel{
+  position:relative;
+  z-index:1;
+  display:block;
+  width:min(100%,1440px);
+  max-width:none;
+  height:auto;
+  aspect-ratio:16/9;
+  margin:0;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  background:#fff;
+}
+.banner-bleed .banner-slide{
+  transform:none;
+  transition:opacity .4s ease,visibility .4s linear;
+}
+.banner-bleed .banner-slide.is-active{transform:none}
+.banner-bleed .banner-slide img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  background:#fff;
+}
+.product-showcase + .feature-benefits{
+  margin:0;
+  padding:16px 0 45px;
+  background:#fff;
+}
+.product-showcase + .feature-benefits .feature-cards{margin-top:0}
+@media(max-width:850px){
+  .banner-bleed .banner-carousel{width:100%;aspect-ratio:16/9}
+  .product-showcase + .feature-benefits{padding:13px 0 38px}
+}
+@media(max-width:590px){
+  .banner-bleed .banner-carousel{width:100%;margin:0;border-radius:0}
+  .product-showcase + .feature-benefits{padding:12px 0 33px}
+}
+@media(prefers-reduced-motion:reduce){
+  .banner-bleed .banner-slide{transition:none!important}
+}
