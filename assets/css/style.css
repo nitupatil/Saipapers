@@ -436,3 +436,22 @@
  .collection-index-bottom .btn{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.collection-visual .banner-slide,.collection-tile{transition:none!important}}
+
+
+/* Premium red-and-white marketing banners, 1280x720 WebP */
+@media(min-width:1101px){
+  .collection-gallery{grid-template-columns:minmax(0,1.34fr) minmax(0,.66fr)}
+}
+@media(min-width:861px) and (max-width:1100px){
+  .collection-gallery{grid-template-columns:minmax(0,1.22fr) minmax(0,.78fr)}
+}
+.collection-visual{background:#ffffff}
+.collection-gallery-eyebrow{color:#1b1d2d}
+.collection-gallery-note{color:#667083}
+.collection-visual-hint{color:#667083}
+.collection-visual .banner-carousel{border:1px solid #eceef3;background:#ffffff}
+.collection-visual .banner-slide img{object-fit:cover;object-position:center;background:#ffffff}
+@media(max-width:590px){
+  .collection-visual{background:#ffffff}
+  .collection-visual .banner-carousel{border:0}
+}
