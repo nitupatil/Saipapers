@@ -493,7 +493,7 @@
   position:relative;
   z-index:1;
   display:block;
-  width:min(100%,850px);
+  width:min(100%,680px);
   max-width:none;
   height:auto;
   aspect-ratio:16/9;
