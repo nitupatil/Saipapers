@@ -493,7 +493,7 @@
   position:relative;
   z-index:1;
   display:block;
-  width:min(100%,1440px);
+  width:min(100%,1080px);
   max-width:none;
   height:auto;
   aspect-ratio:16/9;
@@ -522,6 +522,9 @@
   background:#fff;
 }
 .product-showcase + .feature-benefits .feature-cards{margin-top:0}
+@media(min-width:851px){
+  .banner-bleed .banner-slide img{object-fit:contain}
+}
 @media(max-width:850px){
   .banner-bleed .banner-carousel{width:100%;aspect-ratio:16/9}
   .product-showcase + .feature-benefits{padding:13px 0 38px}
