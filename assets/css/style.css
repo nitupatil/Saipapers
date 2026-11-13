@@ -646,3 +646,129 @@
   .banner-bleed .banner-slide.is-active .hero-art img{animation:none!important}
   .banner-bleed .banner-slide.is-active .hero-art:hover img{transform:none!important}
 }
+
+
+/* Split slider modes: desktop transparent cutout with cross-fade; mobile original promotional banners. */
+.banner-bleed .banner-slide{
+  transition:opacity .64s ease-in-out,visibility .64s linear;
+}
+.banner-bleed .banner-slide .hero-mobile-banner{display:none}
+.banner-bleed .banner-slide.is-active .hero-art img,
+.banner-bleed .banner-slide.is-active .hero-art:hover img{
+  animation:none!important;
+  transform:none!important;
+  transition:none!important;
+}
+@media(max-width:850px){
+  .banner-bleed .banner-carousel{
+    width:100%;
+    height:auto;
+    aspect-ratio:16/9;
+    min-height:0;
+  }
+  .banner-bleed .banner-slide{
+    background:#fff;
+  }
+  .banner-bleed .banner-slide::before,
+  .banner-bleed .banner-slide::after{
+    display:none;
+  }
+  .banner-bleed .banner-slide .hero-slide-inner{
+    display:none!important;
+  }
+  .banner-bleed .banner-slide .hero-mobile-banner{
+    position:relative;
+    display:block;
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+  }
+  .banner-bleed .banner-slide .hero-mobile-banner img{
+    display:block;
+    width:100%;
+    height:100%;
+    max-width:none;
+    max-height:none;
+    object-fit:contain;
+    object-position:center;
+    background:#fff;
+  }
+  /* On upward scrolling show only the search field (or brand on product pages)
+     and menu; hide the large two-row mobile header to reclaim screen space. */
+  .site-header{
+    transition:transform .2s ease,box-shadow .2s ease;
+    will-change:transform;
+  }
+  .site-header.mobile-scroll-hidden{
+    transform:translateY(calc(-100% - 3px));
+    pointer-events:none;
+  }
+  .site-header.mobile-compact .header-inner{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 40px;
+    grid-template-rows:auto;
+    min-height:0;
+    gap:8px;
+    padding:6px 12px;
+    align-items:center;
+  }
+  .site-header.mobile-compact .brand{
+    display:none;
+  }
+  .site-header.mobile-compact .header-search{
+    display:block;
+    grid-column:1;
+    grid-row:1;
+    order:unset;
+    width:100%;
+    max-width:none;
+    min-width:0;
+    margin:0;
+    padding:0;
+  }
+  .site-header.mobile-compact .header-search-field{
+    min-height:39px;
+    border-radius:9px;
+  }
+  .site-header.mobile-compact .header-search-field svg{
+    width:18px;height:18px;margin-left:10px;
+  }
+  .site-header.mobile-compact .header-search input{
+    min-height:37px;
+    font-size:12px;
+    padding:6px 8px;
+  }
+  .site-header.mobile-compact .header-search-go{
+    min-height:31px;
+    padding:0 10px;
+    font-size:11px;
+  }
+  .site-header.mobile-compact .menu-toggle{
+    display:flex;
+    grid-column:2;
+    grid-row:1;
+    width:40px;
+    height:40px;
+  }
+  .site-header.mobile-compact.mobile-compact-title .brand{
+    display:flex;
+    grid-column:1;
+    grid-row:1;
+    min-width:0;
+  }
+  .site-header.mobile-compact.mobile-compact-title .brand img{
+    width:38px;
+    height:36px;
+  }
+  .site-header.mobile-compact.mobile-compact-title .brand-text strong{
+    font-size:13px;
+  }
+  .site-header.mobile-compact.mobile-compact-title .brand-text small{
+    display:none;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .banner-bleed .banner-slide{transition:none!important}
+  .site-header{transition:none!important}
+}
