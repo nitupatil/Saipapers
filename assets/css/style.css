@@ -774,9 +774,13 @@
 }
 
 
-/* White dotted borders to distinguish the compact benefit strip from the rotating banner. */
+/* High-contrast black dotted separators on slim white rails around the three-color benefit strip. */
+.product-showcase + .feature-benefits.compact-benefits{
+  padding:5px 0;
+  background:#fff;
+}
 .product-showcase + .feature-benefits.compact-benefits .benefit-strip{
-  border-top:2px dotted rgba(255,255,255,.96);
-  border-bottom:2px dotted rgba(255,255,255,.96);
+  border-top:3px dotted #151515;
+  border-bottom:3px dotted #151515;
   box-sizing:border-box;
 }
