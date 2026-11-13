@@ -774,13 +774,53 @@
 }
 
 
-/* High-contrast black dotted separators on slim white rails around the three-color benefit strip. */
+/* Widely-spaced black dots on separate white rails above and below the compact benefits. */
 .product-showcase + .feature-benefits.compact-benefits{
-  padding:5px 0;
+  position:relative;
+  padding:8px 0;
   background:#fff;
 }
+.product-showcase + .feature-benefits.compact-benefits::before,
+.product-showcase + .feature-benefits.compact-benefits::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:100%;
+  height:6px;
+  pointer-events:none;
+  background-image:radial-gradient(circle,#151515 2.1px,transparent 2.5px);
+  background-repeat:repeat-x;
+  background-size:27px 6px;
+  background-position:center center;
+}
+.product-showcase + .feature-benefits.compact-benefits::before{top:1px}
+.product-showcase + .feature-benefits.compact-benefits::after{bottom:1px}
 .product-showcase + .feature-benefits.compact-benefits .benefit-strip{
-  border-top:3px dotted #151515;
-  border-bottom:3px dotted #151515;
+  border:0;
   box-sizing:border-box;
+}
+/* Shorter three-color strip on phones; preserve all headings and supporting text. */
+@media(max-width:700px){
+  .product-showcase + .feature-benefits.compact-benefits{padding:7px 0}
+  .compact-benefits .benefit-segment{
+    min-height:87px;
+    padding:7px 8px;
+    gap:2px;
+  }
+  .compact-benefits .benefit-number{font-size:7.7px;line-height:1.13}
+  .compact-benefits .benefit-content h2{
+    font-size:10.5px;
+    line-height:1.14;
+    margin-bottom:3px;
+  }
+  .compact-benefits .benefit-content p{
+    font-size:8.7px;
+    line-height:1.18;
+  }
+}
+@media(max-width:390px){
+  .compact-benefits .benefit-segment{min-height:87px;padding:6px 6px;gap:2px}
+  .compact-benefits .benefit-number{font-size:7.3px}
+  .compact-benefits .benefit-content h2{font-size:10px;line-height:1.13}
+  .compact-benefits .benefit-content p{font-size:8.3px;line-height:1.18}
 }
