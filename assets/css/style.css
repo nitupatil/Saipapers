@@ -772,3 +772,11 @@
   .banner-bleed .banner-slide{transition:none!important}
   .site-header{transition:none!important}
 }
+
+
+/* White dotted borders to distinguish the compact benefit strip from the rotating banner. */
+.product-showcase + .feature-benefits.compact-benefits .benefit-strip{
+  border-top:2px dotted rgba(255,255,255,.96);
+  border-bottom:2px dotted rgba(255,255,255,.96);
+  box-sizing:border-box;
+}
