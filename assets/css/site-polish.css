@@ -268,3 +268,64 @@ h1,h2,h3,h4{color:var(--sp-navy)}
  .btn::before,.hero-cta::before,.header-search-go::before{transition:none!important}
  .product-card,.detail-wrap [class$="-use-card"]{transition:none!important;transform:none!important}
 }
+
+/* Refinement: clean desktop proportions, visible showcases, compact illustrated search */
+.sp-expand{display:none!important}
+.search-list-item a{gap:10px;padding:8px 10px;min-width:0}
+.suggestion-icon{width:46px;height:46px;flex:0 0 46px;border:1px solid #e6eaf1;border-radius:10px;background:#f6f7fa;display:grid;place-items:center;overflow:hidden}
+.suggestion-image{display:block;width:100%;height:100%;object-fit:contain;padding:3px}
+.search-list-item .suggestion-info{flex:1 1 auto;min-width:0}
+.search-list-item .suggestion-info strong{font-size:12.5px}
+.search-list-item .suggestion-info small{font-size:10.5px}
+.search-suggestions{z-index:140}
+.dialog-head{padding:17px 22px}
+.dialog-head h2{font-size:23px;margin:2px 0}
+.dialog-head p{font-size:10px}
+.dialog-body{padding:17px 21px 20px!important}
+.dialog-body>p.small{font-size:12px;margin-bottom:14px;line-height:1.45}
+.dialog-body .field{margin-bottom:10px}
+.dialog-body .field label{display:block;font-size:11.5px;font-weight:750;color:#283954;margin-bottom:4px}
+.dialog-body .field :is(input,select,textarea){min-height:41px;width:100%;border:1px solid #dbe1eb;border-radius:10px;background:#fbfcff;font-size:12px;padding:9px 11px;color:#25354f}
+.dialog-body .field :is(input,select,textarea):focus{border-color:#c72540;outline:2px solid #f9e1e6;outline-offset:0;background:#fff}
+.dialog-body form>.fields-two:empty{display:none}
+.dialog-body .sp-form-more{margin:5px 0 12px;padding:0;border:1px solid #e2e7ef;background:#fafbfe;border-radius:11px;overflow:hidden}
+.dialog-body .sp-form-more summary{cursor:pointer;padding:11px 13px;color:#37445b;font-weight:750;font-size:11.5px;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:9px}
+.dialog-body .sp-form-more summary::-webkit-details-marker{display:none}
+.dialog-body .sp-form-more summary::after{content:"+";font-size:18px;line-height:1;color:#bf2944}
+.dialog-body .sp-form-more[open] summary::after{content:"−"}
+.sp-form-more-fields{padding:3px 12px 10px;display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.sp-form-more-fields .field:last-child{grid-column:1/-1}
+.dialog-body .btn[type=submit]{min-height:43px;font-size:12.5px}
+.dialog-footer-note{font-size:10.5px;line-height:1.45;margin:10px 0 4px}
+.dialog-body .consent{font-size:10px;line-height:1.5}
+.contact-form-card .field input,.contact-form-card .field textarea,.contact-form-card .field select{border-radius:11px}
+@media(min-width:901px){
+ .header-inner{gap:clamp(10px,1.3vw,21px)}
+ .header-inner .brand{min-width:0}
+ .header-inner .header-search{flex:1 1 225px;min-width:182px;max-width:320px}
+ .header-inner .nav-links{gap:clamp(9px,1.2vw,17px);flex:0 0 auto}
+ .header-inner .nav-links>a:not(.btn){font-size:12px;white-space:nowrap}
+ .detail-main{grid-template-columns:minmax(0,.91fr) minmax(0,1.09fr);gap:clamp(18px,2.5vw,31px)}
+ .detail-main>[class$="-gallery"]{max-width:540px;top:105px}
+ .detail-main>[class$="-gallery"] img[id$="-gallery-main"]{height:clamp(245px,24vw,326px)!important;max-height:326px!important}
+ .detail-main>.detail-image>img{height:clamp(245px,24vw,326px)}
+ .detail-main .detail-copy{padding:clamp(19px,2vw,27px)}
+ .detail-main .detail-copy .detail-buttons{justify-content:flex-start}
+ .detail-main .detail-copy .detail-buttons .btn{width:auto;flex:0 1 auto;max-width:100%;white-space:normal}
+ .detail-wrap .specs-section{gap:20px}
+ .detail-wrap [class$="-use-gallery"]{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+ .detail-wrap [class$="-use-card"]>img{height:145px!important;max-height:145px!important}
+}
+@media(min-width:901px) and (max-width:1130px){
+ .header-inner .brand-text small{display:none}
+ .header-inner .brand-text strong{font-size:15px}
+ .header-inner .header-search{max-width:275px}
+ .detail-main{gap:18px}
+}
+@media(max-width:600px){
+ .search-list-item a{padding:7px 8px}
+ .suggestion-icon{width:39px;height:39px;flex-basis:39px}
+ .sp-form-more-fields{grid-template-columns:1fr}
+ .dialog-head{padding:15px 17px}
+ .dialog-body{padding:15px 16px 17px!important}
+}
