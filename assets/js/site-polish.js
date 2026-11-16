@@ -52,6 +52,26 @@
     const phone = form.querySelector('input[name="mobile"]');
     if (phone) {phone.setAttribute("inputmode","tel");phone.setAttribute("autocomplete","tel");}
   }
+  // Keep the Contact page just as concise as the quick quotation dialog.
+  const contactForm = document.querySelector('.contact-form-card form[action*="script.google.com"]');
+  if (contactForm && !contactForm.querySelector(".sp-form-more")) {
+    const details = document.createElement("details");
+    details.className = "sp-form-more";
+    const summary = document.createElement("summary");
+    summary.textContent = "More details (optional)";
+    const extra = document.createElement("div");
+    extra.className = "sp-form-more-fields";
+    for (const name of ["quantity","message","email"]) {
+      const field = contactForm.querySelector('[name="'+name+'"]')?.closest(".field");
+      if (field) extra.appendChild(field);
+    }
+    details.append(summary,extra);
+    const submit = contactForm.querySelector('button[type="submit"]');
+    if (submit) {
+      contactForm.insertBefore(details,submit);
+      submit.textContent = "Request a Quote ↗";
+    }
+  }
   if (!productPage) return;
 
   // Simple vector pictograms, no third-party icon font or dependency.
