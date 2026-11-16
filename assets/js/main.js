@@ -13,20 +13,20 @@
 
   /* All search suggestions are local, fast and linked to real static product pages. */
   const productIndex=[
-    ["Chromo Barcode Labels","chromo-barcode-labels","Barcode labels","chromo barcode paper glossy matte retail stickers"],
-    ["Direct Thermal Labels","direct-thermal-labels","Thermal labels","thermal label rolls ribbon free billing shipping"],
-    ["Shipping Labels","shipping-labels","Shipping labels","courier labels 4x6 100x150 ecommerce parcel"],
-    ["Printed Barcode Labels","printed-barcode-labels","Barcode labels","printed barcode stickers QR inventory serial"],
-    ["Color Barcode Labels","color-barcode-labels","Printed labels","colour barcode labels colored stickers logo"],
-    ["Printed Product Labels","printed-product-labels","Printed labels","packaging food cosmetics multicolor brand"],
-    ["Barcode Printers","barcode-printers","Printers","thermal printer barcode printer machine"],
-    ["Plain Labels","plain-labels","Blank labels","plain blank labels rolls paper"],
-    ["Security Labels","security-labels","Specialty labels","security labels tamper evident asset"],
-    ["Thermal Transfer Ribbons","thermal-transfer-ribbons","Printer consumables","ribbons wax resin transfer consumables"],
-    ["Custom Self Adhesive Labels","custom-self-adhesive-labels","Custom labels","adhesive labels customized sticker labels"]
+    ["Chromo Barcode Labels","chromo-barcode-labels","Barcode labels","chromo barcode paper glossy matte retail stickers","chromo-barcode-labels/gallery/chromo-barcode-label-roll-studio-hero.webp"],
+    ["Direct Thermal Labels","direct-thermal-labels","Thermal labels","thermal label rolls ribbon free billing shipping","direct-thermal-labels/gallery/direct-thermal-labels-studio-hero.webp"],
+    ["Shipping Labels","shipping-labels","Shipping labels","courier labels 4x6 100x150 ecommerce parcel","shipping-labels/gallery/shipping-labels-studio-hero.webp"],
+    ["Printed Barcode Labels","printed-barcode-labels","Barcode labels","printed barcode stickers QR inventory serial","printed-barcode-labels/gallery/printed-barcode-labels-studio-hero.webp"],
+    ["Color Barcode Labels","color-barcode-labels","Printed labels","colour barcode labels colored stickers logo","color-barcode-labels/gallery/color-barcode-labels-multicolor-rolls.webp"],
+    ["Printed Product Labels","printed-product-labels","Printed labels","packaging food cosmetics multicolor brand","printed-product-labels/gallery/printed-product-labels-studio-assortment.webp"],
+    ["Barcode Printers","barcode-printers","Printers","thermal printer barcode printer machine","barcode-printers/tsc-printer-main.webp"],
+    ["Plain Labels","plain-labels","Blank labels","plain blank labels rolls paper","plain-labels/gallery/plain-labels-studio-assortment.webp"],
+    ["Security Labels","security-labels","Specialty labels","security labels tamper evident asset","printed-barcode-labels.webp"],
+    ["Thermal Transfer Ribbons","thermal-transfer-ribbons","Printer consumables","ribbons wax resin transfer consumables","thermal-transfer-ribbons/gallery/thermal-transfer-ribbons-studio-hero.webp"],
+    ["Custom Self Adhesive Labels","custom-self-adhesive-labels","Custom labels","adhesive labels customized sticker labels","color-barcode-labels.webp"]
   ];
   /* Shared search UI is mounted inside the existing header on every page. */
-  const isProductPage=/\/products\/[^/]+\.html$/i.test(location.pathname);
+  const isProductPage=/\/products\/[^/]+(?:\.html)?$/i.test(location.pathname);
   if(isProductPage)document.body.classList.add("product-detail-page");
   const header=document.querySelector(".header-inner");
   if(header&&!isProductPage&&!document.getElementById("header-search-form")){
@@ -37,7 +37,7 @@
     search.className="header-search";
     search.setAttribute("role","search");
     search.setAttribute("data-root",root);
-    search.setAttribute("action",root+"shop.html");
+    search.setAttribute("action",root+"shop");
     search.innerHTML='<div class="header-search-field"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="header-product-search" name="q" type="search" placeholder="Search barcode labels, printers..." autocomplete="off" aria-label="Search Sai Paper Product catalogue" role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls="search-suggestions"><button class="header-search-go" type="submit">Search</button></div><ul id="search-suggestions" class="search-suggestions" role="listbox" aria-label="Product suggestions" hidden></ul>';
     if(brand)brand.insertAdjacentElement("afterend",search);else header.prepend(search);
   }
@@ -60,8 +60,10 @@
       }
       matches.forEach((p,i)=>{
         const li=document.createElement("li");li.setAttribute("role","option");li.setAttribute("aria-selected","false");li.id="suggestion-"+i;li.className="search-list-item";
-        const a=document.createElement("a");a.href=root+"products/"+p[1]+".html";a.tabIndex=-1;
-        const icon=document.createElement("span");icon.className="suggestion-icon";icon.setAttribute("aria-hidden","true");icon.textContent="⌕";
+        const a=document.createElement("a");a.href=root+"products/"+p[1];a.tabIndex=-1;
+        const icon=document.createElement("span");icon.className="suggestion-icon";icon.setAttribute("aria-hidden","true");
+        const photo=document.createElement("img");photo.className="suggestion-image";photo.src=root+"assets/images/"+p[4];photo.alt="";photo.width=46;photo.height=46;photo.loading="lazy";photo.decoding="async";
+        photo.addEventListener("error",()=>{photo.remove();icon.textContent="⌕";},{once:true});icon.appendChild(photo);
         const title=document.createElement("span");title.className="suggestion-info";
         const strong=document.createElement("strong");strong.textContent=p[0];
         const small=document.createElement("small");small.textContent=p[2];
@@ -84,13 +86,13 @@
       if(e.key==="Escape"){close();return;}
       if(e.key==="ArrowDown"){e.preventDefault();if(searchList.hidden)draw();setActive(active+1);return;}
       if(e.key==="ArrowUp"){e.preventDefault();if(searchList.hidden)draw();setActive(active-1);return;}
-      if(e.key==="Enter"&&active>=0&&matches[active]){e.preventDefault();location.href=root+"products/"+matches[active][1]+".html";}
+      if(e.key==="Enter"&&active>=0&&matches[active]){e.preventDefault();location.href=root+"products/"+matches[active][1];}
     });
     searchForm.addEventListener("submit",e=>{
       e.preventDefault();
       const q=searchInput.value.trim();
-      if(active>=0&&matches[active])location.href=root+"products/"+matches[active][1]+".html";
-      else if(q)location.href=root+"shop.html?q="+encodeURIComponent(q);
+      if(active>=0&&matches[active])location.href=root+"products/"+matches[active][1];
+      else if(q)location.href=root+"shop?q="+encodeURIComponent(q);
       else {searchInput.focus();draw();}
     });
     document.addEventListener("pointerdown",e=>{if(!searchForm.contains(e.target))close();});
