@@ -352,7 +352,7 @@
     if(!activeRequest||!validOrigin(e.origin))return;
     const data=e.data;
     if(!data||typeof data!=="object"||data.type!=="SAI_PAPERS_ENQUIRY_RESULT"||data.request_id!==activeRequest.id)return;
-    finish(data.ok===true,String(data.title||""),String(data.message||""));
+    finish(data.status==="processing"?null:data.ok===true,String(data.title||""),String(data.message||""));
   });
   window.addEventListener("beforeunload",event=>{
     if(!activeRequest)return;
