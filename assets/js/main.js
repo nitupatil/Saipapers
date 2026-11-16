@@ -232,7 +232,7 @@
     if(!popupForm)return;
     popupForm.hidden=false;
     const complete=document.getElementById("enquiry-complete");if(complete)complete.hidden=true;
-    const button=popupForm.querySelector('button[type="submit"]');if(button){button.disabled=false;button.textContent="Send Price Enquiry ↗";}
+    const button=popupForm.querySelector('button[type="submit"]');if(button){button.disabled=false;button.textContent="Request a Quote ↗";}
     const title=document.getElementById("enquiry-title");if(title)title.textContent="Request a quotation";
     setFeedback(popupForm,"Your submission stays on this page. We'll confirm receipt after the server responds.","");
   }
