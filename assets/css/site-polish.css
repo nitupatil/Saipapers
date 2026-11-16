@@ -389,3 +389,58 @@ h1,h2,h3,h4{color:var(--sp-navy)}
     background:#fff;
   }
 }
+
+
+/* Enquiry request processing overlay — CSS-only lightweight loop, no remote GIF or script. */
+body.sai-submitting{overflow:hidden!important}
+.sai-submit-dialog{
+  position:fixed;inset:0;margin:0!important;padding:20px!important;width:100vw!important;height:100dvh!important;
+  min-width:100vw!important;min-height:100dvh!important;max-width:none!important;max-height:none!important;
+  border:0!important;border-radius:0!important;background:rgba(15,25,44,.96)!important;color:#fff!important;
+  z-index:2147483647!important;overflow:auto!important;box-sizing:border-box!important;
+  align-items:center;justify-content:center;text-align:center;
+}
+.sai-submit-dialog[open]{display:flex!important}
+.sai-submit-dialog:not([open]){display:none!important}
+.sai-submit-dialog::backdrop{background:rgba(12,20,36,.9);backdrop-filter:blur(6px)}
+.sai-submit-card{
+  width:min(420px,100%);padding:35px 28px 31px;background:linear-gradient(145deg,#24344e,#18263e);
+  border:1px solid rgba(255,255,255,.16);border-radius:24px;
+  box-shadow:0 25px 75px rgba(0,0,0,.34);display:flex;align-items:center;flex-direction:column;
+  gap:10px;position:relative;isolation:isolate;
+}
+.sai-submit-card:before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(circle at 50% -14%,rgba(222,64,89,.24),transparent 58%);z-index:-1;
+}
+.sai-submit-orbit{
+  display:grid;place-items:center;width:100px;height:100px;position:relative;color:#fff;
+  background:rgba(255,255,255,.055);border-radius:50%;margin-bottom:7px;
+}
+.sai-submit-orbit:before,.sai-submit-orbit:after{
+  content:"";position:absolute;inset:4px;border:3px solid transparent;border-top-color:#ed5971;
+  border-right-color:#ef9b75;border-radius:50%;animation:sai-enquiry-spin 1.25s linear infinite;
+}
+.sai-submit-orbit:after{inset:-5px;border-width:2px;border-color:rgba(255,255,255,.18) transparent transparent transparent;animation-direction:reverse;animation-duration:2.6s}
+.sai-submit-orbit svg{width:66px;height:66px;display:block;filter:drop-shadow(0 3px 8px rgba(10,19,38,.2))}
+.sai-submit-kicker{font-size:10px;font-weight:900;letter-spacing:.17em;color:#e6a2a8}
+.sai-submit-card h2{margin:1px 0 0;color:white!important;font-size:clamp(22px,5vw,29px);line-height:1.2;letter-spacing:-.035em}
+.sai-submit-card p{color:#d9e2f0!important;font-size:13px;line-height:1.65;max-width:325px;margin:0;min-height:42px}
+.sai-submit-card small{font-size:10.5px;color:#aebdd3;line-height:1.55}
+.sai-submit-progress{width:min(255px,100%);height:6px;background:rgba(255,255,255,.13);border-radius:100px;overflow:hidden;position:relative;margin:11px 0}
+.sai-submit-progress>span{display:block;position:absolute;left:-45%;width:45%;height:100%;border-radius:100px;background:linear-gradient(90deg,#ee7181,#efb582);animation:sai-enquiry-track 1.45s ease-in-out infinite}
+@keyframes sai-enquiry-spin{to{transform:rotate(360deg)}}
+@keyframes sai-enquiry-track{0%{left:-45%}100%{left:105%}}
+.form-note[data-state="notice"],.dialog-footer-note[data-state="notice"]{
+  background:#f5f7fc;color:#3f536f;border:1px solid #d9e1eb;padding:10px 12px;border-radius:9px;
+}
+@media(max-width:480px){
+  .sai-submit-dialog{padding:15px!important}
+  .sai-submit-card{padding:28px 19px 25px;border-radius:20px}
+  .sai-submit-orbit{width:85px;height:85px}
+  .sai-submit-orbit svg{width:56px;height:56px}
+}
+@media(prefers-reduced-motion:reduce){
+  .sai-submit-orbit::before,.sai-submit-orbit::after,.sai-submit-progress>span{animation:none!important}
+  .sai-submit-progress>span{left:0;width:100%;background:#ee7181}
+}
