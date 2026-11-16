@@ -264,3 +264,6 @@ article.product-card[data-search^="thermal-transfer-ribbons"] .product-img-link 
   .ribbon-use-card h3{font-size:13px}
   .ribbon-use-card p{font-size:10.5px}
 }
+
+/* Keep nine featured products in three balanced rows on wide desktops. */
+@media(min-width:1061px){#featured .card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
