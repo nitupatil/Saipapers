@@ -2,9 +2,9 @@
 (function(){
   // Keep the browser address bar consistent with extensionless canonical links.
   // GitHub Pages serves matching .html files at the clean path.
-  if (/\\.html$/i.test(location.pathname) && location.pathname !== "/index.html") {
+  if (/\.html$/i.test(location.pathname) && location.pathname !== "/index.html") {
     try {
-      const cleanPath=location.pathname.replace(/\\.html$/i,"");
+      const cleanPath=location.pathname.replace(/\.html$/i,"");
       history.replaceState(history.state,"",cleanPath+location.search+location.hash);
     } catch (_) { /* URLs still function with their legacy extension. */ }
   }
