@@ -210,6 +210,50 @@
   const messageField=document.getElementById("enquiry-message");
   let activeRequest=null;
   let requestTimeout=null;
+  let requestSlowTimer=null;
+  const submitOverlay=document.createElement("dialog");
+  submitOverlay.id="sai-submit-overlay";
+  submitOverlay.className="sai-submit-dialog";
+  submitOverlay.setAttribute("aria-labelledby","sai-submit-title");
+  submitOverlay.setAttribute("aria-describedby","sai-submit-description");
+  submitOverlay.innerHTML='<div class="sai-submit-card"><span class="sai-submit-orbit" aria-hidden="true"><svg viewBox="0 0 80 80" width="76" height="76" focusable="false"><rect x="14" y="22" width="52" height="37" rx="8" fill="none" stroke="currentColor" stroke-width="3"/><path d="m17 26 23 18 23-18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M40 5a35 35 0 0 1 35 35" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span class="sai-submit-kicker">SAI PAPER PRODUCT</span><h2 id="sai-submit-title">Submitting your enquiry</h2><p id="sai-submit-description" role="status" aria-live="polite">Sending your details securely. Please keep this page open.</p><span class="sai-submit-progress" aria-hidden="true"><span></span></span><small>One request at a time • Please do not resubmit</small></div>';
+  document.body.appendChild(submitOverlay);
+  submitOverlay.addEventListener("cancel",event=>{if(activeRequest)event.preventDefault();});
+  function showSubmitting(){
+    const state=submitOverlay.querySelector("#sai-submit-description");
+    if(state)state.textContent="Sending your details securely. Please keep this page open.";
+    document.body.classList.add("sai-submitting");
+    try{if(typeof submitOverlay.showModal==="function")submitOverlay.showModal();else submitOverlay.setAttribute("open","");}
+    catch(_){submitOverlay.setAttribute("open","");}
+    submitOverlay.focus();
+    clearTimeout(requestSlowTimer);
+    requestSlowTimer=window.setTimeout(()=>{
+      if(activeRequest&&state)state.textContent="Google is taking longer than usual. Your request may already be processing; please do not send it again.";
+    },12000);
+  }
+  function hideSubmitting(){
+    clearTimeout(requestSlowTimer);requestSlowTimer=null;
+    document.body.classList.remove("sai-submitting");
+    try{if(submitOverlay.open&&typeof submitOverlay.close==="function")submitOverlay.close();else submitOverlay.removeAttribute("open");}
+    catch(_){submitOverlay.removeAttribute("open");}
+  }
+  function recentKey(form,mobile){
+    const product=String(form.elements.namedItem("product")?.value||"").trim().toLowerCase();
+    const type=String(form.elements.namedItem("enquiry_type")?.value||"price");
+    return product+"|"+type+"|"+mobile.slice(-4);
+  }
+  function recentEnquiry(){
+    try{return JSON.parse(sessionStorage.getItem("sai-last-enquiry")||"null");}
+    catch(_){return null;}
+  }
+  function rememberEnquiry(signature){
+    try{sessionStorage.setItem("sai-last-enquiry",JSON.stringify({signature,ts:Date.now()}));}
+    catch(_){}
+  }
+  function clearRecentEnquiry(){
+    try{sessionStorage.removeItem("sai-last-enquiry");}
+    catch(_){}
+  }
   const targetOrigin=location.origin;
   const iframe=document.createElement("iframe");
   iframe.name="sai-enquiry-transport";
@@ -276,7 +320,9 @@
     if(!activeRequest)return;
     const form=activeRequest.form;
     clearTimeout(requestTimeout);requestTimeout=null;activeRequest=null;
+    hideSubmitting();
     const submit=form.querySelector('button[type="submit"]');if(submit)submit.disabled=false;
+    if(ok===false)clearRecentEnquiry();
     if(ok){
       setFeedback(form,"Enquiry submitted — "+message,"success");
       if(form===popupForm){
@@ -289,8 +335,11 @@
         const result=form.parentElement.querySelector(".inline-enquiry-result");
         if(result){result.hidden=false;result.querySelector("h3").textContent=title||"Enquiry submitted";result.querySelector("p").textContent=message||"Your enquiry has been received.";}
       }
+    }else if(ok===null){
+      setFeedback(form,"This enquiry may already have reached our team. Please don't submit it again. For confirmation, contact us on WhatsApp.","notice");
+      if(submit){submit.disabled=true;submit.textContent="Confirmation pending";}
     }else{
-      setFeedback(form,message||"Unable to confirm submission. Please try again or contact us on WhatsApp.","error");
+      setFeedback(form,message||"Unable to submit. Please check your details or contact us on WhatsApp.","error");
       if(submit)submit.textContent="Try Sending Again ↗";
     }
   }
@@ -305,6 +354,11 @@
     if(!data||typeof data!=="object"||data.type!=="SAI_PAPERS_ENQUIRY_RESULT"||data.request_id!==activeRequest.id)return;
     finish(data.ok===true,String(data.title||""),String(data.message||""));
   });
+  window.addEventListener("beforeunload",event=>{
+    if(!activeRequest)return;
+    event.preventDefault();
+    event.returnValue="";
+  });
   forms.forEach(form=>{
     form.removeAttribute("target");
     form.addEventListener("submit",e=>{
@@ -315,24 +369,33 @@
       if(value.length===12&&value.startsWith("91"))value=value.slice(2);
       if(!/^[6-9]\d{9}$/.test(value)){if(field){field.setCustomValidity("Enter a valid 10-digit Indian mobile number.");field.reportValidity();}return;}
       if(field){field.setCustomValidity("");field.value=value;}
+      const signature=recentKey(form,value);
+      const previous=recentEnquiry();
+      if(previous&&previous.signature===signature&&Date.now()-previous.ts<180000){
+        setFeedback(form,"A similar enquiry was recently submitted. It may already be in our inbox. Please contact our team on WhatsApp before resending.","notice");
+        return;
+      }
       const id=makeRequestId();
       let hidden=form.querySelector('input[name="request_id"]');
       if(!hidden){hidden=document.createElement("input");hidden.type="hidden";hidden.name="request_id";form.appendChild(hidden);}
       hidden.value=id;
       // Accept either old/new backend field naming, while avoiding duplicates.
-      const previous=form.querySelector('input[name="requirements"]');
+      const previousRequirements=form.querySelector('input[name="requirements"]');
       const msg=form.elements.namedItem("message");
-      if(msg&&!previous){const req=document.createElement("input");req.type="hidden";req.name="requirements";form.appendChild(req);}
+      if(msg&&!previousRequirements){const req=document.createElement("input");req.type="hidden";req.name="requirements";form.appendChild(req);}
       const req=form.elements.namedItem("requirements");if(req&&msg)req.value=msg.value;
       const btn=form.querySelector('button[type="submit"]');
       if(btn){btn.disabled=true;btn.textContent="Submitting…";}
       setFeedback(form,"Submitting your enquiry securely. Please keep this page open.","pending");
       activeRequest={id,form};
+      rememberEnquiry(signature);
+      showSubmitting();
       form.target=iframe.name;
       requestTimeout=window.setTimeout(()=>{
-        finish(false,"Confirmation unavailable","We couldn't confirm the email submission. Please check with our team on WhatsApp before resending, to avoid a duplicate enquiry.");
-      },30000);
-      HTMLFormElement.prototype.submit.call(form);
+        finish(null,"Confirmation pending","Your enquiry may have been delivered, but we have not received a confirmation from Google. Please don't resend it. Contact us on WhatsApp if needed.");
+      },45000);
+      try{HTMLFormElement.prototype.submit.call(form);}
+      catch(err){clearTimeout(requestTimeout);finish(false,"Unable to start enquiry","The submission could not start. Please try again.");}
     });
     const mobile=form.elements.namedItem("mobile");if(mobile)mobile.addEventListener("input",()=>mobile.setCustomValidity(""));
   });
