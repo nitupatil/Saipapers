@@ -362,3 +362,30 @@ h1,h2,h3,h4{color:var(--sp-navy)}
   .topbar-inner>span:first-child::after{font-size:9px}
   .topbar-items a{font-size:9px}
 }
+
+
+/* Homepage slider: phone/tablet receives original 16:9 banner artwork.
+   Desktop keeps the existing live text + product cutout presentation unchanged. */
+@media (max-width:850px){
+  .banner-bleed .banner-slide .hero-slide-inner{
+    display:none!important;
+  }
+  .banner-bleed .banner-slide .hero-mobile-banner{
+    display:block!important;
+    position:relative;
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+  }
+  .banner-bleed .banner-slide .hero-mobile-banner>img{
+    display:block!important;
+    width:100%!important;
+    height:100%!important;
+    max-width:100%!important;
+    max-height:100%!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    background:#fff;
+  }
+}
