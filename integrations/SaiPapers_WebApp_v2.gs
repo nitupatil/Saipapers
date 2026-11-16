@@ -1,5 +1,5 @@
 /**
- * Sai Paper Product enquiry API v2 — same-page confirmation.
+ * Sai Paper Product enquiry API v3 — faster processing + reliable acknowledgement.
  * REDEPLOY IN THE EXISTING WEB APP PROJECT:
  * Deploy > Manage deployments > Edit > Version: New version > Deploy.
  * Execute as Me; Who has access: Anyone.
@@ -48,18 +48,31 @@ function doPost(e) {
       return resultPage_('Invalid product', 'Please choose a product from the Sai Paper Product catalogue.', false, requestId);
     }
 
+    // Reserve the enquiry quickly. Do not hold a global lock while Gmail accepts
+    // the message: that would serialize unrelated customers and make them wait.
+    const cache = CacheService.getScriptCache();
+    const digest = Utilities.computeDigest(
+      Utilities.DigestAlgorithm.SHA_256, mobile + '|' + product + '|' + type
+    );
+    const key = 'sai_' + Utilities.base64EncodeWebSafe(digest).replace(/=+$/, '');
     const lock = LockService.getScriptLock();
-    lock.waitLock(10000);
+    if (!lock.tryLock(4000)) {
+      return resultPage_('Service busy', 'We could not start this enquiry yet. Please try again in a moment.', false, requestId);
+    }
     try {
-      const cache = CacheService.getScriptCache();
-      const digest = Utilities.computeDigest(
-        Utilities.DigestAlgorithm.SHA_256, mobile + '|' + product + '|' + type
-      );
-      const key = 'sai_' + Utilities.base64EncodeWebSafe(digest).replace(/=+$/, '');
-      if (cache.get(key)) {
-        return resultPage_('Already submitted', 'A similar enquiry was recently submitted. Please wait before resending.', true, requestId);
+      const state = cache.get(key);
+      if (state === 'sent') {
+        return resultPage_('Already submitted', 'A similar enquiry was sent recently. Please do not send it again.', true, requestId);
       }
+      if (state === 'processing') {
+        return resultPage_('Request processing', 'A similar enquiry is already being processed. Please do not send it again.', null, requestId);
+      }
+      cache.put(key, 'processing', 180);
+    } finally {
+      lock.releaseLock();
+    }
 
+    try {
       const time = Utilities.formatDate(new Date(), CONFIG.timeZone, 'dd MMM yyyy, hh:mm a');
       const ref = 'SP-' + Utilities.formatDate(new Date(), CONFIG.timeZone, 'yyyyMMdd-HHmmss');
       const fields = [
@@ -87,9 +100,6 @@ function doPost(e) {
         '<table style="border-collapse:collapse;width:100%;font-size:14px">' + rows + '</table>' +
         '<p style="color:#6c707e;font-size:12px;margin-top:24px">Automated enquiry from www.saipaper.in</p></div>';
 
-      if (MailApp.getRemainingDailyQuota() < 1) {
-        throw new Error('Mail sending quota exhausted');
-      }
       const options = {
         to: CONFIG.to,
         subject: 'Sai Papers | ' + type + ' Enquiry - ' + product,
@@ -99,11 +109,14 @@ function doPost(e) {
       };
       if (email) options.replyTo = email;
       MailApp.sendEmail(options);
-      cache.put(key, '1', 120);
+      cache.put(key, 'sent', 180);
       return resultPage_('Enquiry submitted', 'Thank you, ' + name + '. Your ' +
         type.toLowerCase() + ' enquiry for ' + product + ' has been submitted.', true, requestId);
-    } finally {
-      lock.releaseLock();
+    } catch (sendError) {
+      // Release the reservation so a genuine failed send can be retried.
+      // A successfully accepted email is never retried automatically.
+      cache.remove(key);
+      throw sendError;
     }
   } catch (err) {
     console.error('Sai Paper Product enquiry error: ' + err);
@@ -123,7 +136,7 @@ function escape_(value) {
     ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
 }
 function resultPage_(heading, message, ok, requestId) {
-  const accent = ok ? '#19704c' : '#ca080d';
+  const accent = ok === true ? '#19704c' : ok === null ? '#243553' : '#ca080d';
   let html = '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head>' +
     '<body style="background:#f5f6f8;font-family:Arial,sans-serif;color:#1b1d2d">' +
     '<main style="max-width:470px;margin:12vh auto;padding:32px;background:#fff;border-radius:12px">' +
@@ -136,15 +149,23 @@ function resultPage_(heading, message, ok, requestId) {
     const status = {
       type: 'SAI_PAPERS_ENQUIRY_RESULT',
       request_id: requestId,
-      ok: !!ok,
+      ok: ok === true,
+      status: ok === null ? 'processing' : (ok === true ? 'sent' : 'failed'),
       title: heading,
       message: message
     };
     // HtmlService runs scripts inside its own sandboxed frame; the top-level
     // page is our domain. Its JS checks both origin and matching request ID.
     const serialized = JSON.stringify(status).replace(/</g, '\\u003c');
-    const signal = '<script>try{window.top.postMessage(' + serialized + ',' +
-      JSON.stringify(CONFIG.website) + ');}catch(e){}</script>';
+    // HTML Service may nest the response in multiple Google-owned iframes.
+    // Send a few lightweight notifications so the website can acknowledge
+    // promptly even when the first message races iframe initialization.
+    const signal = '<script>(function(){var packet=' + serialized + ';var origin=' +
+      JSON.stringify(CONFIG.website) + ';function notify(){try{window.top.postMessage(packet,origin);}catch(e){}' +
+      'try{window.parent.postMessage(packet,origin);}catch(e){}}notify();' +
+      'document.addEventListener("DOMContentLoaded",notify,{once:true});' +
+      'window.addEventListener("load",notify,{once:true});' +
+      'setTimeout(notify,250);setTimeout(notify,900);})();</script>';
     html = html.replace('</body></html>', signal + '</body></html>');
   }
   return HtmlService.createHtmlOutput(html)
