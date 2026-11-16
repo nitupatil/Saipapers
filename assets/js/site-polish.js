@@ -27,6 +27,31 @@
     }, { passive: true });
   }
 
+  // Streamlined quotation form without changing the Apps Script submission field names.
+  const form = document.getElementById("enquiry-form");
+  if (form && !form.querySelector(".sp-form-more")) {
+    const details = document.createElement("details");
+    details.className = "sp-form-more";
+    const summary = document.createElement("summary");
+    summary.textContent = "Add quantity, size or other details (optional)";
+    const extra = document.createElement("div");
+    extra.className = "sp-form-more-fields";
+    const email = form.querySelector('input[name="email"]')?.closest(".field");
+    const qty = form.querySelector('input[name="quantity"]')?.closest(".field");
+    const message = form.querySelector('input[name="message"]')?.closest(".field");
+    for (const field of [qty, message, email]) {
+      if (field) extra.appendChild(field);
+    }
+    details.append(summary,extra);
+    const submit = form.querySelector('button[type="submit"]');
+    if (submit) form.insertBefore(details,submit);
+    const description = document.querySelector(".dialog-body > p.small");
+    if (description) description.textContent = "Share a few details. Our team will contact you about sizes and pricing.";
+    if (submit) submit.textContent = "Request a Quote ↗";
+    // When the product is already selected from a card, keep it easy to see and change.
+    const phone = form.querySelector('input[name="mobile"]');
+    if (phone) {phone.setAttribute("inputmode","tel");phone.setAttribute("autocomplete","tel");}
+  }
   if (!productPage) return;
 
   // Simple vector pictograms, no third-party icon font or dependency.
@@ -55,30 +80,9 @@
     if (anchor) anchor.insertAdjacentElement("afterend", container);
   }
 
-  // A visible short set of application cards; the rest remain available on demand.
-  // Without JS the original full card collection remains visible.
-  document.querySelectorAll('.detail-wrap [class$="-use-gallery"]').forEach((gallery, galleryIndex) => {
-    const cards = Array.from(gallery.children).filter(node => node.matches('article, div'));
-    if (cards.length <= 4 || gallery.nextElementSibling?.classList.contains("sp-expand")) return;
-    if (!gallery.id) gallery.id = "sp-use-gallery-" + (galleryIndex + 1);
-    const showCount = 4;
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "sp-expand";
-    button.setAttribute("aria-controls", gallery.id);
-    let expanded = false;
-    function setExpanded(next) {
-      expanded = next;
-      cards.forEach((card, index) => {
-        if (index >= showCount) card.hidden = !expanded;
-      });
-      button.setAttribute("aria-expanded", String(expanded));
-      button.textContent = expanded ? "Show fewer examples" : "View all " + cards.length + " examples";
-    }
-    button.addEventListener("click", () => setExpanded(!expanded));
-    gallery.insertAdjacentElement("afterend", button);
-    setExpanded(false);
-  });
+  // Keep every product-use example visible, on every screen.
+  document.querySelectorAll(".sp-expand").forEach(button => button.remove());
+  document.querySelectorAll('.detail-wrap [class$="-use-gallery"] > [hidden]').forEach(item => { item.hidden = false; });
 
   // Add light entrance polish, not visibility-dependent animations.
   if (!reducedMotion && "IntersectionObserver" in window) {
