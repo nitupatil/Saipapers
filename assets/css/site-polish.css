@@ -329,3 +329,15 @@ h1,h2,h3,h4{color:var(--sp-navy)}
  .dialog-head{padding:15px 17px}
  .dialog-body{padding:15px 16px 17px!important}
 }
+
+/* Clean optional fields on the contact page without disturbing form submission. */
+.contact-form-card .sp-form-more{margin:10px 0 14px;border-radius:12px;border:1px solid #e3e8ef;background:#fbfcfe;overflow:hidden}
+.contact-form-card .sp-form-more summary{cursor:pointer;font-size:12px;font-weight:760;color:#263653;list-style:none;padding:11px 14px;display:flex;justify-content:space-between}
+.contact-form-card .sp-form-more summary::-webkit-details-marker{display:none}
+.contact-form-card .sp-form-more summary::after{content:"+";color:#c72540;font-size:18px;line-height:1}
+.contact-form-card .sp-form-more[open] summary::after{content:"−"}
+.contact-form-card .sp-form-more-fields{padding:6px 14px 11px;display:grid;grid-template-columns:1fr 1fr;gap:9px 12px}
+.contact-form-card .sp-form-more-fields .field:last-child{grid-column:1/-1}
+.contact-form-card .fields-two:has(> .field:only-child),.dialog-body .fields-two:has(> .field:only-child){grid-template-columns:1fr}
+.contact-form-card .fields-two:empty{display:none}
+@media(max-width:600px){.contact-form-card .sp-form-more-fields{grid-template-columns:1fr}}
