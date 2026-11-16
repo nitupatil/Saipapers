@@ -109,15 +109,16 @@ function doPost(e) {
       };
       if (email) options.replyTo = email;
       MailApp.sendEmail(options);
-      cache.put(key, 'sent', 180);
-      return resultPage_('Enquiry submitted', 'Thank you, ' + name + '. Your ' +
-        type.toLowerCase() + ' enquiry for ' + product + ' has been submitted.', true, requestId);
     } catch (sendError) {
-      // Release the reservation so a genuine failed send can be retried.
-      // A successfully accepted email is never retried automatically.
-      cache.remove(key);
+      // The send operation did not complete successfully; clear the temporary reservation.
+      try { cache.remove(key); } catch (cacheError) { console.error(cacheError); }
       throw sendError;
     }
+    // MailApp has accepted the message. Never mark the submission failed just
+    // because the noncritical duplicate-prevention cache has an outage.
+    try { cache.put(key, 'sent', 180); } catch (cacheError) { console.error(cacheError); }
+    return resultPage_('Enquiry submitted', 'Thank you, ' + name + '. Your ' +
+      type.toLowerCase() + ' enquiry for ' + product + ' has been submitted.', true, requestId);
   } catch (err) {
     console.error('Sai Paper Product enquiry error: ' + err);
     return resultPage_('Unable to submit', 'Your enquiry could not be sent. Please try again or contact us on WhatsApp.', false, requestId);
