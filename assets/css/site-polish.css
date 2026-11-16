@@ -341,3 +341,24 @@ h1,h2,h3,h4{color:var(--sp-navy)}
 .contact-form-card .fields-two:has(> .field:only-child),.dialog-body .fields-two:has(> .field:only-child){grid-template-columns:1fr}
 .contact-form-card .fields-two:empty{display:none}
 @media(max-width:600px){.contact-form-card .sp-form-more-fields{grid-template-columns:1fr}}
+
+/* Never wrap the location and phone contact strip: retain full accessible source text. */
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap!important;gap:8px!important;white-space:nowrap}
+.topbar-inner>span:first-child{display:inline-flex;align-items:center;gap:4px;flex:0 1 auto;min-width:0;font-size:0!important;line-height:1;white-space:nowrap}
+.topbar-inner>span:first-child>.topbar-star{font-size:11px;line-height:1}
+.topbar-inner>span:first-child::after{content:"Label Mfg. & Supply • Chh. Sambhajinagar";font-size:11px;line-height:1.3;white-space:nowrap}
+.topbar-items{display:flex;align-items:center;gap:13px;flex:0 0 auto;white-space:nowrap}
+.topbar-items a{white-space:nowrap}
+@media(max-width:850px){
+  .topbar-inner{gap:6px!important}
+  .topbar-inner>span:first-child::after{content:"Labels • Chh. Sambhajinagar";font-size:10px}
+  .topbar-items .topbar-hide{display:none!important}
+  .topbar-items{gap:0}
+}
+@media(max-width:390px){
+  .topbar-inner{gap:3px!important}
+  .topbar-inner>span:first-child{gap:2px}
+  .topbar-inner>span:first-child>.topbar-star{font-size:9px}
+  .topbar-inner>span:first-child::after{font-size:9px}
+  .topbar-items a{font-size:9px}
+}
