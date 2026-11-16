@@ -1,37 +1,53 @@
-# Google Apps Script — same-page enquiry confirmation
+# Sai Paper Product — Google Apps Script enquiry service (v3)
 
-Website: https://www.saipaper.in/
-Existing web app endpoint: https://script.google.com/macros/s/AKfycbzCoQbymaTksWBM8rmDdp_G4FTQWejpn15hqGmML-OeSJfj-ityDWhC3DkRdf7IXtyX/exec
+The website is served by GitHub Pages. Enquiry emails are sent by an **independently deployed** Google Apps Script Web App. A GitHub commit alone **cannot update the live Apps Script**.
 
-## Required one-time action
+- Website: https://www.saipaper.in/
+- Existing endpoint: https://script.google.com/macros/s/AKfycbzCoQbymaTksWBM8rmDdp_G4FTQWejpn15hqGmML-OeSJfj-ityDWhC3DkRdf7IXtyX/exec
+- **New source to deploy:** [SaiPapers_WebApp_v3.gs](SaiPapers_WebApp_v3.gs)
+- Previous working version (rollback): [SaiPapers_WebApp_v2.gs](SaiPapers_WebApp_v2.gs)
 
-The website is on GitHub Pages, but your email-sending Google Apps Script runs in a separate Google account. Updating GitHub **does not redeploy the script**. The current script will keep showing its standalone result page unless you install v2.
+## Required deployment in your existing Google Apps Script project
 
-1. Open your existing Google Apps Script project (do **not** create a new project).
-2. Open `Code.gs`. Copy everything from [SaiPapers_WebApp_v2.gs](SaiPapers_WebApp_v2.gs), replacing the previous code.
-3. Save.
-4. Choose **Deploy → Manage deployments**.
-5. Find your existing Web app deployment, click the **pencil/Edit** icon.
-6. Set the **Version** dropdown to **New version**, then click **Deploy**.
-7. Confirm the **/exec URL is unchanged**. The website already uses this exact URL.
-8. Open www.saipaper.in, choose a product, click **Ask Price**, enter a real test number and submit.
-9. The website button should show **Submitting…**, then a green **Enquiry submitted** result on the same page after Google Apps Script acknowledges the email request.
-10. Verify the mail with an HTML details table arrives at `saipaper25@gmail.com` (also check spam).
+1. Open the **existing** Apps Script project behind the website's `/exec` URL.
+2. Select `Code.gs`. Copy **all code** from `SaiPapers_WebApp_v3.gs` and replace the old code.
+3. Click **Save**.
+4. Click **Deploy → Manage deployments → Edit (pencil)** for the *existing* Web App.
+5. Choose **New version**, then click **Deploy**. Do **not** create a new deployment URL.
+6. Confirm the deployment settings: **Execute as: Me**; **Who has access: Anyone**.
+7. Authorize the Mail service if prompted. Keep the recipient as `saipaper25@gmail.com`.
+8. Open https://www.saipaper.in/contact on mobile and desktop, refresh once, submit **one** test enquiry and check both the on-screen result and the actual email.
+9. In Apps Script → **Executions**, confirm the matching `doPost` execution completed without error.
 
-## How it works
+## What changed
 
-- GitHub Pages submits an HTML POST to a hidden iframe with the Apps Script `/exec` URL.
-- Apps Script validates name, mobile, city, product and optional fields; sends email using `MailApp.sendEmail`; then sends `window.top.postMessage` to https://www.saipaper.in with a matching one-time request ID.
-- The website accepts the acknowledgement only from Google's Apps Script/Googleusercontent origin with the matching request ID. It only reports **submitted** when the server says it succeeded.
-- If the server does not acknowledge within 30 seconds, the website shows **confirmation unavailable** rather than falsely claiming email delivery.
-- `HtmlService.XFrameOptionsMode.ALLOWALL` allows the hidden iframe response to render. The only status message target origin is the exact Sai Paper Product website domain.
-- A two-minute duplicate check and an invisible honeypot help reduce accidental repeat messages. They are not robust CAPTCHA protection. For high traffic, add a proper managed anti-bot or server-side limit service.
+**Website UI (deployed with GitHub Pages):**
+- Immediately shows a full-screen animated branded overlay on a valid form submission, blocking clicks and extra submissions.
+- Keeps the screen protected while waiting for the Google Apps Script result. At 12 seconds it displays a slower-processing message.
+- Uses one-time request IDs and a three-minute per-tab safeguard against resubmitting the same product/phone-number suffix.
+- Waits up to **45 seconds** for the success/failure acknowledgement. When no acknowledgement arrives, it does **not** falsely claim the email was rejected or definitely delivered. It displays a neutral *confirmation pending* message and advises against resending.
+- The submission overlay automatically closes when Google provides a valid result (or when the 45-second uncertainty limit is reached).
+- The processing animation uses local CSS/SVG only: **no remote GIF, animation library or extra network download**.
+
+**Google Apps Script v3 (requires the manual deployment above):**
+- Reserves a request in the two-minute/three-minute short-term cache while holding the script lock briefly, **releasing the lock before** `MailApp.sendEmail`. This avoids holding other customer requests behind one slow email.
+- Removes the extra daily-quota service call before sending (Google's mail service will report an actual quota failure).
+- Separates `processing`, `sent`, and `failed` acknowledgements, and retries the iframe `postMessage` signal briefly to reduce missed browser notifications.
+- Returns positive confirmation **only after** `MailApp.sendEmail` finishes without throwing.
+- Retains all submitted fields, validation, honeypot handling, email formatting and configured recipient.
+
+The `MailApp.sendEmail` call is still subject to Google availability, service latency and delivery time. Neither GitHub Pages nor browser JavaScript can guarantee immediate inbox delivery. The CSS overlay affects **user interaction**, not actual network or mail latency.
 
 ## Troubleshooting
 
-- **Still waiting to confirm**: Usually the v2 Apps Script code was saved but the Web App was not redeployed as a new version, or the iframe is blocked by browser settings. Edit the existing deployment again.
-- **No email**: Verify authorization, Google daily sending quota and the configured recipient address, then inspect **Executions** in Apps Script.
-- **Form goes to a new tab**: Refresh the site (or hard reload) to load the latest `assets/js/main.js`.
-- **Same product enquiry already submitted**: Wait more than two minutes before trying again.
+- **Email arrives but website shows “Confirmation pending”:** Most commonly, the deployed Apps Script is an older version or the browser blocked its nested-iframe acknowledgement. Verify that the **existing Web App was redeployed as New version**. Open Apps Script → Executions and check the result. Do not resend immediately.
+- **Overlay doesn't appear:** Hard refresh the website to load the latest versioned `main.js` and `site-polish.css`.
+- **No email:** Check Apps Script execution logs, sender authorization, quota and Gmail spam folder.
+- **Request processing / already sent:** Another very similar enquiry is in progress or was recently accepted. Wait; do not try repeatedly.
+- **Browser blocks third-party iframes:** The email may still be sent, but same-page confirmation could remain unavailable. Try a browser without strict iframe blocking or contact your team via WhatsApp instead.
+- **Unchanged `/exec` URL:** Keep the same deployment endpoint to avoid updating every HTML form.
+- **Rollback:** Paste `SaiPapers_WebApp_v2.gs` into the Apps Script editor, then deploy a new version of the existing Web App.
 
-**Privacy and security:** Do not use a personal secret/API token in public HTML. The endpoint is public and can receive spam. No client-side code can securely verify private Gmail delivery; the app only confirms that the authorized script successfully called `MailApp.sendEmail`.
+## Safety and data protection
+
+The public site uses a hidden form POST to Google's Web App URL. The browser accepts result messages only from Google Apps Script/Googleusercontent origins with a matching one-time request ID. The short-term cache reduces accidental duplicates, but is not a transactional database or CAPTCHA. It cannot prove final Gmail inbox delivery; it verifies only Google MailApp's successful acceptance. Do not store private API secrets in public GitHub files.
