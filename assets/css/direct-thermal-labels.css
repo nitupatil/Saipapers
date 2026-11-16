@@ -1,0 +1,25 @@
+/* Direct Thermal Labels — matching gallery controls; sizing is unified by site-polish.css */
+.direct-gallery{min-width:0;align-self:start}
+.direct-gallery-feature{margin:0;overflow:hidden;border:1px solid #e5e8ef;border-radius:18px;background:#fff;box-shadow:0 13px 32px rgba(23,35,61,.06)}
+.direct-gallery-focus{position:relative;display:block;width:100%;border:0;background:#f8f9fc;cursor:zoom-in;padding:0}
+.direct-gallery-focus img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain}
+.direct-gallery-enlarge{position:absolute;right:12px;bottom:12px;padding:6px 9px;border-radius:9px;color:#15203a;background:#fffffff0;font-size:11px;font-weight:750}
+.direct-gallery-caption{padding:12px 15px;display:grid;gap:3px}
+.direct-gallery-caption strong{font-size:14px;color:#1e2b46}
+.direct-gallery-caption span{font-size:12px;line-height:1.45;color:#667386}
+.direct-gallery-controlbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0 10px}
+.direct-gallery-controlbar h3{font-size:13px;margin:0}
+.direct-gallery-pager{display:flex;align-items:center;gap:9px}
+.direct-gallery-pager button{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;border:1px solid #dce2ed;background:white;font-size:17px}
+.direct-gallery-count{font-size:11px;color:#69788d;font-weight:700;font-variant-numeric:tabular-nums}
+.direct-gallery-thumbs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.direct-gallery-thumb{min-width:0;text-align:center;padding:4px;border:2px solid #e5e9f0;border-radius:10px;background:#fff;cursor:pointer}
+.direct-gallery-thumb img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;border-radius:5px}
+.direct-gallery-thumb span{display:block;font-size:9px;color:#667085;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.direct-gallery-thumb.is-selected{border-color:#c72540;background:#fff9fa}
+.direct-gallery-disclaimer{font-size:10.5px;line-height:1.55;color:#738095;margin:10px 2px 0}
+.direct-gallery-modal{position:fixed;width:min(790px,95vw);max-height:93dvh;padding:15px;border:0;border-radius:18px;box-shadow:0 30px 90px rgba(13,19,34,.5)}
+.direct-gallery-modal::backdrop{background:rgba(13,22,38,.8);backdrop-filter:blur(4px)}
+.direct-gallery-modal img{display:block;width:100%;max-height:calc(93dvh - 100px);object-fit:contain}
+.direct-gallery-modal-close{position:absolute;right:10px;top:9px;width:39px;height:39px;border:1px solid #dfe4eb;border-radius:50%;background:white;font-size:25px}
+.direct-gallery-modal p{text-align:center;font-size:12px;font-weight:750;margin:9px 42px 0}
