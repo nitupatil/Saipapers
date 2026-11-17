@@ -351,7 +351,7 @@ h1,h2,h3,h4{color:var(--sp-navy)}
 .topbar-items a{white-space:nowrap}
 @media(max-width:850px){
   .topbar-inner{gap:6px!important}
-  .topbar-inner>span:first-child::after{content:"Labels • Chh. Sambhajinagar";font-size:10px}
+  .topbar-inner>span:first-child::after{content:"Label Manufacturer • Chh. Sambhajinagar";font-size:10px}
   .topbar-items .topbar-hide{display:none!important}
   .topbar-items{gap:0}
 }
@@ -359,7 +359,7 @@ h1,h2,h3,h4{color:var(--sp-navy)}
   .topbar-inner{gap:3px!important}
   .topbar-inner>span:first-child{gap:2px}
   .topbar-inner>span:first-child>.topbar-star{font-size:9px}
-  .topbar-inner>span:first-child::after{font-size:9px}
+  .topbar-inner>span:first-child::after{content:"Label Mfr. • Chh. Sambhajinagar";font-size:9px}
   .topbar-items a{font-size:9px}
 }
 
