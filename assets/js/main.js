@@ -202,7 +202,7 @@
   /* Acknowledgement panels stay in the current page; no browser tabs. */
   if(dialog&&!document.getElementById("enquiry-complete")){
     const content=dialog.querySelector(".dialog-body");
-    if(content){const panel=document.createElement("section");panel.id="enquiry-complete";panel.className="enquiry-confirmation";panel.hidden=true;panel.setAttribute("role","status");panel.setAttribute("aria-live","polite");panel.innerHTML='<span class="confirmation-icon" aria-hidden="true">✓</span><h3>Enquiry submitted</h3><p>Your enquiry has been received.</p><button type="button" class="btn btn-red" data-close-enquiry>Close</button>';content.appendChild(panel);}
+    if(content){const panel=document.createElement("section");panel.id="enquiry-complete";panel.className="enquiry-confirmation";panel.hidden=true;panel.setAttribute("role","status");panel.setAttribute("aria-live","polite");panel.innerHTML='<span class="confirmation-icon" aria-hidden="true">✓</span><h3>Enquiry received</h3><p>Thank you. We have received your enquiry.</p><a class="btn btn-red sai-whatsapp-followup" href="https://wa.me/919834934303" target="_blank" rel="noopener noreferrer">Connect on WhatsApp ↗</a><button type="button" class="btn btn-outline" data-close-enquiry>Close</button>';content.appendChild(panel);}
   }
   const popupForm=document.getElementById("enquiry-form");
   const productField=document.getElementById("enquiry-product");
@@ -229,7 +229,7 @@
     clearTimeout(requestSlowTimer);
     requestSlowTimer=window.setTimeout(()=>{
       if(activeRequest&&state)state.textContent="Google is taking longer than usual. Your request may already be processing; please do not send it again.";
-    },12000);
+    },8500);
   }
   function hideSubmitting(){
     clearTimeout(requestSlowTimer);requestSlowTimer=null;
@@ -267,7 +267,7 @@
   forms.filter(form=>form!==popupForm).forEach(form=>{
     if(form.parentElement.querySelector(".inline-enquiry-result"))return;
     const panel=document.createElement("section");panel.className="inline-enquiry-result";panel.hidden=true;panel.setAttribute("role","status");panel.setAttribute("aria-live","polite");
-    panel.innerHTML='<span class="confirmation-icon" aria-hidden="true">✓</span><h3>Enquiry submitted</h3><p>Your enquiry has been received.</p><button type="button" class="btn btn-outline" data-new-enquiry>Send another enquiry</button>';
+    panel.innerHTML='<span class="confirmation-icon" aria-hidden="true">✓</span><h3>Enquiry received</h3><p>Thank you. We have received your enquiry.</p><a class="btn btn-red sai-whatsapp-followup" href="https://wa.me/919834934303" target="_blank" rel="noopener noreferrer">Connect on WhatsApp ↗</a><button type="button" class="btn btn-outline" data-new-enquiry>Send another enquiry</button>';
     form.insertAdjacentElement("afterend",panel);
     panel.querySelector("[data-new-enquiry]").addEventListener("click",()=>{panel.hidden=true;form.hidden=false;form.reset();setFeedback(form,"Enter your details to submit another price enquiry.","");});
   });
@@ -316,6 +316,16 @@
     if(window.crypto&&crypto.getRandomValues){const bytes=new Uint32Array(3);crypto.getRandomValues(bytes);return "sp-"+Array.from(bytes).map(x=>x.toString(16)).join("-");}
     return "sp-"+Date.now()+"-"+Math.random().toString(36).slice(2);
   }
+  function followupUrl(form){
+    const get=name=>String(form.elements.namedItem(name)?.value||"").trim().slice(0,160);
+    const msg=["Namaskar, I sent an enquiry to Sai Paper Product.","Product: "+get("product"),"Name: "+get("name"),"Mobile: "+get("mobile"),"Requirement: "+(get("message")||"Please share product details and pricing.")].join("\\n");
+    return "https://wa.me/919834934303?text="+encodeURIComponent(msg);
+  }
+  function showWhatsApp(form){
+    const target=form===popupForm?document.getElementById("enquiry-complete"):form.parentElement.querySelector(".inline-enquiry-result");
+    const link=target?.querySelector(".sai-whatsapp-followup");
+    if(link)link.href=followupUrl(form);
+  }
   function finish(ok,title,message){
     if(!activeRequest)return;
     const form=activeRequest.form;
@@ -324,7 +334,8 @@
     const submit=form.querySelector('button[type="submit"]');if(submit)submit.disabled=false;
     if(ok===false)clearRecentEnquiry();
     if(ok){
-      setFeedback(form,"Enquiry submitted — "+message,"success");
+      setFeedback(form,"Enquiry received — "+message,"success");
+      showWhatsApp(form);
       if(form===popupForm){
         form.hidden=true;
         const complete=document.getElementById("enquiry-complete");
@@ -336,7 +347,7 @@
         if(result){result.hidden=false;result.querySelector("h3").textContent=title||"Enquiry submitted";result.querySelector("p").textContent=message||"Your enquiry has been received.";}
       }
     }else if(ok===null){
-      setFeedback(form,"This enquiry may already have reached our team. Please don't submit it again. For confirmation, contact us on WhatsApp.","notice");
+      setFeedback(form,"We sent your enquiry, but Google has not confirmed delivery. Please do not resend. <a href=\"https://wa.me/919834934303\" target=\"_blank\" rel=\"noopener noreferrer\">Contact us on WhatsApp</a> to confirm.","notice");
       if(submit){submit.disabled=true;submit.textContent="Confirmation pending";}
     }else{
       setFeedback(form,message||"Unable to submit. Please check your details or contact us on WhatsApp.","error");
@@ -393,7 +404,7 @@
       form.target=iframe.name;
       requestTimeout=window.setTimeout(()=>{
         finish(null,"Confirmation pending","Your enquiry may have been delivered, but we have not received a confirmation from Google. Please don't resend it. Contact us on WhatsApp if needed.");
-      },45000);
+      },22000);
       try{HTMLFormElement.prototype.submit.call(form);}
       catch(err){clearTimeout(requestTimeout);finish(false,"Unable to start enquiry","The submission could not start. Please try again.");}
     });
