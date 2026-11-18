@@ -278,7 +278,12 @@
   }
   function setFeedback(form,text,state){
     const node=findFeedback(form);
-    if(node){node.textContent=text;node.dataset.state=state||"";}
+    if(node){
+      node.textContent=text;node.dataset.state=state||"";
+      if(state==="notice"&&/WhatsApp/i.test(text)){
+        const a=document.createElement("a");a.href="https://wa.me/919834934303?text="+encodeURIComponent("Namaskar, I submitted a Sai Paper Product enquiry. Please confirm receipt.");a.target="_blank";a.rel="noopener noreferrer";a.textContent=" Open WhatsApp ↗";a.className="sai-feedback-whatsapp";node.appendChild(a);
+      }
+    }
   }
   function resetPopup(){
     if(!popupForm)return;
@@ -318,7 +323,7 @@
   }
   function followupUrl(form){
     const get=name=>String(form.elements.namedItem(name)?.value||"").trim().slice(0,160);
-    const msg=["Namaskar, I sent an enquiry to Sai Paper Product.","Product: "+get("product"),"Name: "+get("name"),"Mobile: "+get("mobile"),"Requirement: "+(get("message")||"Please share product details and pricing.")].join("\\n");
+    const msg=["Namaskar, I sent an enquiry to Sai Paper Product.","Product: "+get("product"),"Name: "+get("name"),"Mobile: "+get("mobile"),"Requirement: "+(get("message")||"Please share product details and pricing.")].join("\n");
     return "https://wa.me/919834934303?text="+encodeURIComponent(msg);
   }
   function showWhatsApp(form){
@@ -347,7 +352,7 @@
         if(result){result.hidden=false;result.querySelector("h3").textContent=title||"Enquiry submitted";result.querySelector("p").textContent=message||"Your enquiry has been received.";}
       }
     }else if(ok===null){
-      setFeedback(form,"We sent your enquiry, but Google has not confirmed delivery. Please do not resend. <a href=\"https://wa.me/919834934303\" target=\"_blank\" rel=\"noopener noreferrer\">Contact us on WhatsApp</a> to confirm.","notice");
+      setFeedback(form,"Your enquiry was sent, but Google has not confirmed receipt. Please do not resend to avoid duplicates. Contact us on WhatsApp to confirm.","notice");
       if(submit){submit.disabled=true;submit.textContent="Confirmation pending";}
     }else{
       setFeedback(form,message||"Unable to submit. Please check your details or contact us on WhatsApp.","error");
