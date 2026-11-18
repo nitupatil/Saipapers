@@ -23,7 +23,7 @@ Source repository: https://github.com/nitupatil/Saipapers
 ## Enquiries
 The site uses a normal HTML form POST to the Google Apps Script URL provided by the business.
 - Form submits name, mobile, city, selected product and optional email/quantity/message.
-- Form submission opens a new tab to show the Apps Script success/failure page. The website does **not** claim submission success before it is confirmed there.
+- Forms submit once in a hidden browser transport. The page displays receipt only after a matching Google Apps Script confirmation message; otherwise it shows a non-duplicate pending state with a WhatsApp confirmation link.
 - Recipient configured in the separate Apps Script deployment: `saipaper25@gmail.com`.
 - Apps Script must be deployed as a Web App with Execute as: Me; Who has access: Anyone.
 - Forms must be tested after deployment; GitHub Pages cannot verify delivery on its own.
