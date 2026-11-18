@@ -209,6 +209,7 @@
   const typeField=document.getElementById("enquiry-type");
   const messageField=document.getElementById("enquiry-message");
   let activeRequest=null;
+  let pendingRequest=null;
   let requestTimeout=null;
   let requestSlowTimer=null;
   const submitOverlay=document.createElement("dialog");
@@ -334,6 +335,7 @@
   function finish(ok,title,message){
     if(!activeRequest)return;
     const form=activeRequest.form;
+    if(ok===null)pendingRequest=activeRequest;else pendingRequest=null;
     clearTimeout(requestTimeout);requestTimeout=null;activeRequest=null;
     hideSubmitting();
     const submit=form.querySelector('button[type="submit"]');if(submit)submit.disabled=false;
@@ -365,9 +367,12 @@
       /^https:\/\/[a-z0-9-]+\.googleusercontent\.com$/.test(origin);
   }
   window.addEventListener("message",e=>{
-    if(!activeRequest||!validOrigin(e.origin))return;
+    if(!validOrigin(e.origin))return;
     const data=e.data;
-    if(!data||typeof data!=="object"||data.type!=="SAI_PAPERS_ENQUIRY_RESULT"||data.request_id!==activeRequest.id)return;
+    if(!data||typeof data!=="object"||data.type!=="SAI_PAPERS_ENQUIRY_RESULT")return;
+    const match=activeRequest||pendingRequest;
+    if(!match||data.request_id!==match.id)return;
+    if(!activeRequest)activeRequest=pendingRequest;
     finish(data.status==="processing"?null:data.ok===true,String(data.title||""),String(data.message||""));
   });
   window.addEventListener("beforeunload",event=>{
@@ -404,6 +409,7 @@
       if(btn){btn.disabled=true;btn.textContent="Submitting…";}
       setFeedback(form,"Submitting your enquiry securely. Please keep this page open.","pending");
       activeRequest={id,form};
+      pendingRequest=null;
       rememberEnquiry(signature);
       showSubmitting();
       form.target=iframe.name;
