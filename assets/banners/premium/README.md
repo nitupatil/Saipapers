@@ -1,25 +1,28 @@
-# Sai Paper Product — Premium Banner Assets
+# Sai Paper Product — 9 optimized mobile-only homepage banners
 
-Nine AI-generated branded marketing banners are displayed in the homepage product gallery.
+These WebP files replace the previous mobile promotional slideshow artwork. The desktop homepage artwork, text, buttons and image cutouts are **unchanged**.
 
-- Optimized output: WebP 1280 × 720, quality 84. Approximate combined file size: 911 KB.
-- Original concept: product on the right, clear product-specific messaging on the left, white background with red/navy accents.
-- Slider: images change automatically every **2 seconds** (unless reduced-motion preference applies, or banner has keyboard focus / tab is hidden).
-- Each banner links to the matching product detail page. The first slide loads eagerly and later slides load as needed.
-- Source PNG exports are retained outside this repo; WebP provides smaller downloads.
+- Target display size: **1280 × 720 px (16:9)** for every image.
+- Source: Sai Papers AI-generated banner illustrations from November 2026.
+- Compression: high-fidelity WebP quality 98; **lossless WebP** for the Color Barcode Labels and Printed Product Labels banners to preserve saturated colors and fine edges.
+- All banners visually depict their corresponding category: labels, barcodes, shipping, printers or thermal transfer ribbons.
+- Combined PNG originals: approximately 15.7 MB; combined nine WebP files: approximately 2.78 MB.
+- All images are for promotional illustration and may show sample barcodes, fictional package details or depicted hardware. Do not treat mockups as verified available inventory.
 
-## Assets
+## Files and slideshow order
 
-- `premium/chromo-barcode-labels-1280x720.webp` — Chromo Barcode Labels
-- `premium/direct-thermal-labels-1280x720.webp` — Direct Thermal Labels
-- `premium/shipping-labels-1280x720.webp` — Shipping Labels
-- `premium/printed-barcode-labels-1280x720.webp` — Printed Barcode Labels
-- `premium/color-barcode-labels-1280x720.webp` — Color Barcode Labels
-- `premium/printed-product-labels-1280x720.webp` — Printed Product Labels
-- `premium/barcode-printers-1280x720.webp` — Barcode Printers
-- `premium/plain-labels-1280x720.webp` — Plain Labels
-- `premium/custom-self-adhesive-labels-1280x720.webp` — Custom Self Adhesive Labels
+1. `chromo-barcode-labels-1280x720.webp` — Chromo Barcode Labels
+2. `direct-thermal-labels-1280x720.webp` — Direct Thermal Labels
+3. `shipping-labels-1280x720.webp` — Shipping Labels
+4. `printed-barcode-labels-1280x720.webp` — Printed Barcode Labels
+5. `color-barcode-labels-1280x720.webp` — Color Barcode Labels (lossless at output resolution)
+6. `printed-product-labels-1280x720.webp` — Printed Product Labels (lossless at output resolution)
+7. `barcode-printers-1280x720.webp` — Barcode Printers
+8. `plain-labels-1280x720.webp` — Plain Adhesive Labels
+9. `thermal-transfer-ribbons-1280x720.webp` — Thermal Transfer Ribbons (new mobile-only source)
 
-## Content note
+The original banners are available in Git history if rollback is required. The site uses the same slideshow links and timing, with a cache-busting version on mobile images.
 
-These are AI-generated promotional concepts, not verified photographs of actual batches, model specifications or included accessories. Check printed text, barcode details, final materials and model availability before treating artwork as exact inventory evidence.
+### Performance
+
+All nine files are optimized without introducing a new JS dependency. The first mobile slide receives `fetchpriority="high"` and `loading="eager"`; later slides load lazily.
